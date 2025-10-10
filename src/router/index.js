@@ -1,8 +1,15 @@
+import QuanLyNguoiDung from '@/components/QuanLyNguoiDung.vue'
 import TrangChu from '@/components/TrangChu.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import MapBus from '../components/MapBus.vue'
 
 const routes = [
+  {
+    path: '/quan-ly-nguoi-dung',
+    name: 'QuanLyNguoiDung',
+    component: QuanLyNguoiDung,
+    meta: { requiresAuth: true },
+  },
   {
     path: '/trang-chu',
     name: 'TrangChu',

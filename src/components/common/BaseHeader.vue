@@ -53,6 +53,7 @@
           src="https://res.cloudinary.com/springboot-cloud/image/upload/v1760101127/logo_xp5752.png"
           alt="CM-GROUP"
           width="100%"
+          height="100px"
         />
       </router-link>
     </div>
@@ -70,7 +71,7 @@
       </button>
 
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav text-capitalize">
           <li class="nav-item">
             <router-link class="nav-link" to="/" @click.prevent="checkLogin('/')"
               >Trang chủ</router-link
@@ -202,23 +203,11 @@ export default {
         name: payload.name,
         email: payload.email,
         picture: payload.picture,
+        family_name: payload.family_name,
+        given_name: payload.given_name,
       }
 
       localStorage.setItem('googleUser', JSON.stringify(this.user))
-
-      try {
-        await fetch(
-          `https://corsproxy.io/?https://script.google.com/macros/s/AKfycbwMrB1fbcHtAWLUGC-h-7XiCiZCLNM7R_CxL8HcAoSRMAm10z4_bKoBAwBS8ytGnebr/exec`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.user),
-          },
-        )
-        console.log('Ghi vào Google Sheet thành công!')
-      } catch (err) {
-        console.error('Lỗi ghi sheet:', err)
-      }
 
       eventBus.emit('userLoggedIn', this.user)
       this.$router.push('/')
@@ -253,7 +242,7 @@ export default {
   font-weight: 500;
   color: #ffffff;
   transition: color 0.3s ease;
-  padding: 5px 40px !important;
+  padding: 0px 40px !important;
   font-size: 17px;
 }
 .nav-link:hover {

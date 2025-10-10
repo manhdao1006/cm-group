@@ -41,7 +41,7 @@
         </div>
       </div> -->
       <footer class="text-center text-white py-1 copy-right-mobile">
-        &copy; Copyright 2025 by CM - GROUP
+        &copy; Copyright 2025 by hethongquanly
       </footer>
     </div>
   </footer>

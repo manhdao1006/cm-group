@@ -88,12 +88,19 @@
     </div>
   </nav>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark-subtle w-100" style="padding-top: 5px; padding-bottom: 5px;">
+  <nav
+    class="navbar navbar-expand-lg navbar-dark bg-dark-subtle w-100"
+    style="padding-top: 5px; padding-bottom: 5px"
+  >
     <div class="container-fluid">
       <div class="collapse navbar-collapse justify-content-start" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item" v-for="item in activeNavItems" :key="item.to">
-            <router-link class="nav-link d-flex align-items-center text-uppercase fw-bolder" style="font-size: 14px; color: #183153;" :to="item.to">
+            <router-link
+              class="nav-link d-flex align-items-center text-uppercase fw-bolder"
+              style="font-size: 14px; color: #183153"
+              :to="item.to"
+            >
               <i :class="[item.icon, 'me-2']"></i>
               <span class="me-2">/</span>
               {{ item.label }}
@@ -106,7 +113,7 @@
 </template>
 
 <script>
-import { eventBus } from '@/eventBus';
+import { eventBus } from '@/eventBus'
 
 export default {
   name: 'BaseHeader',

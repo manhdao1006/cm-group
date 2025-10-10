@@ -47,10 +47,10 @@
   </nav>
 
   <nav class="navbar navbar-expand-lg navbar-dark w-100">
-    <div class="container-fluid">
+    <div class="container">
       <router-link class="navbar-brand fw-bold text-black d-flex align-items-center" to="/">
         <img
-          src="https://res.cloudinary.com/springboot-cloud/image/upload/v1760089172/logo_xp5752.png"
+          src="https://res.cloudinary.com/springboot-cloud/image/upload/v1760101127/logo_xp5752.png"
           alt="CM-GROUP"
           width="100%"
         />
@@ -72,16 +72,32 @@
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Trang chủ</router-link>
+            <router-link class="nav-link" to="/" @click.prevent="checkLogin('/')"
+              >Trang chủ</router-link
+            >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/map-bus">Map-Bus</router-link>
+            <router-link class="nav-link" to="/map-bus" @click.prevent="checkLogin('/map-bus')"
+              >Map-Bus</router-link
+            >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Truy xuất dữ liệu</router-link>
+            <a
+              class="nav-link"
+              href="#"
+              @click.prevent="
+                checkLoginExternal(
+                  'https://docs.google.com/spreadsheets/d/1azXTmdVEGAJkRxF6fxtVKt5LxMHo_Vp4xubCB_9wmSs/edit?gid=0#gid=0',
+                )
+              "
+            >
+              Truy xuất dữ liệu
+            </a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Quản lý người dùng</router-link>
+            <router-link class="nav-link" to="/" @click.prevent="checkLogin('/quan-ly-nguoi-dung')"
+              >Quản lý người dùng</router-link
+            >
           </li>
         </ul>
       </div>
@@ -114,6 +130,7 @@
 
 <script>
 import { eventBus } from '@/eventBus'
+import { useToast } from 'vue-toastification'
 
 export default {
   name: 'BaseHeader',
@@ -121,10 +138,10 @@ export default {
     return {
       user: null,
       clientId: '954414108201-06v6lu48msd5hu6jkfgc77sit28i3gvl.apps.googleusercontent.com',
+      toast: null,
       navItems: [
         { to: '/', label: 'Trang chủ', icon: 'fas fa-home' },
         { to: '/map-bus', label: 'Map-Bus', icon: 'fas fa-map-marked-alt' },
-        { to: '/truy-xuat', label: 'Truy xuất dữ liệu', icon: 'fas fa-database' },
         { to: '/quan-ly-nguoi-dung', label: 'Quản lý người dùng', icon: 'fas fa-users-cog' },
       ],
     }
@@ -134,12 +151,12 @@ export default {
     if (savedUser) this.user = JSON.parse(savedUser)
     this.loadGoogleScript()
     window.handleCredentialResponse = this.handleCredentialResponse
+    this.toast = useToast()
   },
   computed: {
     activeNavItems() {
       const current = this.$route.path
       return this.navItems.filter((item) => {
-        // Map '/' và '/trang-chu' thành trang chủ
         if (
           (current === '/' || current === '/trang-chu') &&
           (item.to === '/' || item.to === '/trang-chu')
@@ -151,6 +168,22 @@ export default {
     },
   },
   methods: {
+    checkLoginExternal(url) {
+      if (!this.user) {
+        this.toast.error('Bạn cần đăng nhập để truy cập!')
+        return
+      }
+      window.open(url, '_blank')
+    },
+    checkLogin(path) {
+      const protectedRoutes = ['/map-bus', '/quan-ly-nguoi-dung']
+      if (!this.user && protectedRoutes.includes(path)) {
+        this.toast.error('Bạn cần đăng nhập để truy cập!')
+        return
+      }
+
+      this.$router.push(path)
+    },
     loadGoogleScript() {
       if (document.getElementById('gsi-script')) return
       const script = document.createElement('script')

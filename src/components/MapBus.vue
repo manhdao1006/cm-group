@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseHeader />
-    <div id="map" style="width: 100%; height: 500px"></div>
+    <div id="map" class="container-lg" style="width: 100%; height: 500px"></div>
     <BaseFooter />
   </div>
 </template>
@@ -172,3 +172,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.grid-map {
+  margin: 0 50px;
+}
+</style>

@@ -122,8 +122,8 @@
 </template>
 
 <script>
-import { eventBus } from '@/eventBus'
-import { useToast } from 'vue-toastification'
+import { eventBus } from '@/eventBus';
+import { useToast } from 'vue-toastification';
 
 export default {
   name: 'BaseHeader',
@@ -194,8 +194,37 @@ export default {
       }
 
       localStorage.setItem('googleUser', JSON.stringify(this.user))
-
       eventBus.emit('userLoggedIn', this.user)
+
+      try {
+        const params = new URLSearchParams({
+          action: 'save',
+          ho: this.user.family_name,
+          ten: this.user.given_name,
+          hoVaTen: this.user.name,
+          email: this.user.email,
+          linkAnh: this.user.picture,
+          ngayTao: new Date().toISOString(),
+        }).toString()
+
+        const SHEET_URL =
+          'https://script.google.com/macros/s/AKfycbz2-Nv7ijJwAdHIQeV3RV2r23kSlHrmTB9SbnmExVdBiYToG_P-zZd8XlNdfeLqYyYF/exec?' +
+          params
+
+        const res = await fetch(SHEET_URL)
+        const data = await res.json()
+
+        if (data.status === 'success') {
+          this.message = 'Lưu thông tin thành công!'
+          this.success = true
+        } else {
+          this.message = 'Lỗi: ' + data.message
+          this.success = false
+        }
+      } catch (err) {
+        this.message = 'Lỗi: ' + err.message
+        this.success = false
+      }
       this.$router.push('/')
     },
 

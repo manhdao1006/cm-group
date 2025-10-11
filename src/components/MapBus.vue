@@ -1,8 +1,48 @@
 <template>
   <div>
     <BaseHeader />
-    <div id="map" class="container-lg" style="width: 100%; height: 500px"></div>
-    <BaseFooter />
+
+    <div class="container-lg px-0 mt-3 mb-3" style="height: 600px">
+      <div class="row h-100 g-0 border border-dark-subtle border-2 rounded-3">
+        <div class="col-3 overflow-auto h-100 border-dark-subtle border-2 border-end">
+          <input
+            type="text"
+            class="form-control mb-2"
+            placeholder="Tìm kiếm theo tên hoặc mã tài xế"
+            v-model="searchText"
+          />
+          <ul
+            class="list-group list-group-flush flex-grow-1 overflow-auto"
+            style="max-height: 520px"
+          >
+            <li
+              v-for="item in filteredVehicleList"
+              :key="item.bienSoXe"
+              class="list-group-item"
+              :class="{
+                'list-group-item-active': selectedVehicle === item,
+                'list-group-item-hover': selectedVehicle !== item,
+              }"
+              @click="selectVehicle(item)"
+              style="cursor: pointer; font-size: 12px"
+            >
+              <div v-if="item.trangThai === '1'" class="dot-ping-red"></div>
+              <div v-if="item.trangThai === '0'" class="dot-ping-green"></div>
+              <strong>{{ item.tenXe }}</strong
+              ><br />
+              Biển số xe: {{ item.bienSoXe }}<br />
+              Nhiệt độ: {{ item.nhietDo }}<br />
+              Tên tài xế: {{ item.tenTaiXe }}<br />
+              Số điện thoại: {{ item.soDienThoai }}<br />
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-9 h-100">
+          <div id="map" class="w-100 h-100"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -11,14 +51,12 @@ import L from 'leaflet'
 import 'leaflet.markercluster'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet/dist/leaflet.css'
-import BaseFooter from './common/BaseFooter.vue'
 import BaseHeader from './common/BaseHeader.vue'
 
 export default {
   name: 'MapView',
   components: {
     BaseHeader,
-    BaseFooter,
   },
   data() {
     return {
@@ -27,18 +65,34 @@ export default {
       markerCluster: null,
       sheetId: '1azXTmdVEGAJkRxF6fxtVKt5LxMHo_Vp4xubCB_9wmSs',
       apiKey: 'AIzaSyBJOLTWvnRRegbkw1rRvr0K2dzV9SZ_Mwk',
-      range: 'A:I',
+      range: 'A:J',
       darkMode: false,
       baseLayer: null,
+      vehicleList: [],
+      searchText: '', // thêm dòng này
+      selectedVehicle: null,
     }
+  },
+  computed: {
+    filteredVehicleList() {
+      if (!this.searchText) return this.vehicleList
+      const text = this.searchText.toLowerCase()
+      return this.vehicleList.filter(
+        (v) => v.maNhanVien.toLowerCase().includes(text) || v.tenTaiXe.toLowerCase().includes(text),
+      )
+    },
   },
   mounted() {
     this.initMap()
     this.fetchSheetData()
-    setInterval(this.refreshMarkers, 10000)
+    // setInterval(this.refreshMarkers, 10000)
   },
   methods: {
     initMap() {
+      if (this.map) {
+        this.map.remove()
+        this.map = null
+      }
       this.map = L.map('map').setView([16.0678, 108.2208], 12)
 
       this.baseLayer = L.tileLayer(
@@ -51,6 +105,9 @@ export default {
 
       this.markerCluster = L.markerClusterGroup()
       this.map.addLayer(this.markerCluster)
+      setTimeout(() => {
+        this.map.invalidateSize()
+      }, 200)
     },
 
     async refreshMarkers() {
@@ -79,39 +136,96 @@ export default {
       if (!data.values) return
 
       const rows = data.values.slice(1)
-      const latestByMaXe = {}
+      const latestByBienSo = {}
+
       rows.forEach((row) => {
-        const maXe = row[1]
+        const bienSoXe = row[1]
         const ngayNhap = new Date(row[0])
-        if (!latestByMaXe[maXe] || ngayNhap > new Date(latestByMaXe[maXe][0])) {
-          latestByMaXe[maXe] = row
+        if (!latestByBienSo[bienSoXe] || ngayNhap > new Date(latestByBienSo[bienSoXe][0])) {
+          latestByBienSo[bienSoXe] = row
         }
       })
 
-      const latestRows = Object.values(latestByMaXe)
-      const markersOnly = []
+      const latestRows = Object.values(latestByBienSo)
+      const vehicles = []
 
-      latestRows.forEach((row) => {
+      for (const row of latestRows) {
         const [
+          ngayNhap = '',
+          bienSoXe = '',
+          tenXe = '',
+          trangThai = '0',
+          lngStr = '',
+          latStr = '',
+          nhietDo = '',
+          maNhanVien = '-',
+          tenTaiXe = '-',
+          soDienThoai = '-',
+        ] = row
+
+        const lat = parseFloat(latStr)
+        const lng = parseFloat(lngStr)
+        if (isNaN(lat) || isNaN(lng)) continue
+
+        vehicles.push({
           ngayNhap,
-          maXe,
+          bienSoXe,
           tenXe,
           trangThai,
-          lngStr,
-          latStr,
+          lat,
+          lng,
+          nhietDo: parseFloat(nhietDo) || 0,
           maNhanVien,
           tenTaiXe,
           soDienThoai,
-        ] = row
-        console.log(typeof trangThai)
+          address: 'Đang tải...',
+        })
+      }
+      vehicles.sort((a, b) => {
+        // So sánh nhiệt độ giảm dần
+        if (b.nhietDo !== a.nhietDo) {
+          return b.nhietDo - a.nhietDo
+        }
+        // Nếu nhiệt độ bằng nhau thì sắp xếp theo trạng thái (1 trước 0)
+        return b.trangThai.localeCompare(a.trangThai)
+      })
 
-        const lng = parseFloat(lngStr)
-        const lat = parseFloat(latStr)
-        if (isNaN(lat) || isNaN(lng)) return
+      // B3: hiển thị marker
+      this.vehicleList = vehicles
+      this.showMarkers(fitBounds)
+      this.loadAddressesAsync()
+    },
+    async loadAddressesAsync() {
+      for (const v of this.vehicleList) {
+        try {
+          const address = await this.getAddressFromLatLng(v.lat, v.lng)
+          v.address = address
+          // cập nhật lại popup nếu đang mở
+          if (v.marker && v.marker.isPopupOpen()) {
+            v.marker.setPopupContent(this.generatePopupContent(v))
+          } else if (v.marker) {
+            v.marker.bindPopup(this.generatePopupContent(v))
+          }
+        } catch {
+          v.address = 'Không xác định được địa chỉ'
+        }
+      }
+    },
+    generatePopupContent(v) {
+      return `
+        Địa chỉ: ${v.address}
+      `
+    },
+    showMarkers(fitBounds) {
+      this.markerCluster.clearLayers()
+      this.markers = []
 
-        const isActive = String(trangThai) === '1'
+      const markersOnly = []
 
-        const marker = L.marker([lat, lng], {
+      this.vehicleList.forEach((v) => {
+        const isActive = v.trangThai === '1'
+
+        const marker = L.marker([v.lat, v.lng], {
           icon: L.icon({
             iconUrl:
               'https://res.cloudinary.com/springboot-cloud/image/upload/v1759936855/marker_car_uwtjen.png',
@@ -120,48 +234,25 @@ export default {
           }),
         })
 
-        const circle = L.circle([lat, lng], {
-          color: isActive ? 'orange' : 'green',
-          fillColor: isActive ? 'orange' : 'green',
+        const circle = L.circle([v.lat, v.lng], {
+          color: isActive ? 'red' : 'green',
+          fillColor: isActive ? 'tomato' : 'green',
           fillOpacity: 0.35,
           radius: 200,
           weight: 2,
         }).addTo(this.map)
 
-        if (isActive) {
-          let opacity = 0.35
-          let increasing = true
-          circle._interval = setInterval(() => {
-            if (increasing) {
-              opacity += 0.05
-              if (opacity >= 0.7) increasing = false
-            } else {
-              opacity -= 0.05
-              if (opacity <= 0.35) increasing = true
-            }
-            circle.setStyle({ fillOpacity: opacity })
-          }, 300)
-        }
-
-        const popupContent = `<strong>${tenXe}</strong><br>Mã xe: ${maXe}<br>Kinh độ: ${lng}<br>Vĩ độ: ${lat}<br>Ngày nhập: ${ngayNhap}<br>Trạng thái: ${trangThai}<br>Mã nhân viên: ${maNhanVien}<br>Tên tài xế: ${tenTaiXe}<br>Số điện thoại: ${soDienThoai}`
-
-        if (isActive) {
-          marker.bindPopup(popupContent)
-          setTimeout(() => {
-            marker.openPopup()
-          }, 300)
-        } else {
-          marker.bindPopup(popupContent)
-          marker.on('click', () => {
-            marker.openPopup()
-            this.map.flyTo([lat, lng], 15)
-          })
-        }
+        marker.bindPopup(this.generatePopupContent(v))
+        marker.on('click', () => {
+          marker.openPopup()
+          this.map.flyTo([v.lat, v.lng], 15)
+        })
 
         this.markerCluster.addLayer(marker)
         this.markers.push(marker)
         this.markers.push(circle)
         markersOnly.push(marker)
+        v.marker = marker
       })
 
       if (fitBounds && markersOnly.length > 0) {
@@ -169,12 +260,86 @@ export default {
         this.map.fitBounds(group.getBounds(), { padding: [50, 50] })
       }
     },
+    async getAddressFromLatLng(lat, lng) {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+      )
+      const data = await response.json()
+      return data.display_name || 'Không xác định được địa chỉ'
+    },
+
+    flyToMarker(item) {
+      if (item.marker) {
+        this.map.flyTo([item.lat, item.lng], 15)
+        item.marker.openPopup()
+      }
+    },
+    selectVehicle(item) {
+      this.selectedVehicle = item
+      this.flyToMarker(item)
+    },
   },
 }
 </script>
 
 <style>
-.grid-map {
-  margin: 0 50px;
+.dot-ping-red {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+.dot-ping-red::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: red;
+  opacity: 0.6;
+  animation: ping 1s infinite;
+}
+
+.dot-ping-green {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+.dot-ping-green::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: green;
+  opacity: 0.6;
+  animation: ping 1s infinite;
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.list-group-item-active {
+  background-color: #3782f5;
+  color: #ffffff;
+}
+.list-group-item-hover:hover {
+  background-color: #e0e0e0; /* màu hover */
 }
 </style>

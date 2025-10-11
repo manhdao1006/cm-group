@@ -53,7 +53,7 @@
           src="https://res.cloudinary.com/springboot-cloud/image/upload/v1760101127/logo_xp5752.png"
           alt="CM-GROUP"
           width="100%"
-          height="100px"
+          height="80px"
         />
       </router-link>
     </div>
@@ -95,6 +95,11 @@
               Truy xuất dữ liệu
             </a>
           </li>
+          <!-- <li class="nav-item">
+            <router-link class="nav-link" to="/" @click.prevent="checkLogin('/du-lieu')"
+              >Truy xuất dữ liệu</router-link
+            >
+          </li> -->
           <li class="nav-item">
             <router-link class="nav-link" to="/" @click.prevent="checkLogin('/quan-ly-nguoi-dung')"
               >Quản lý người dùng</router-link
@@ -130,8 +135,8 @@
 </template>
 
 <script>
-import { eventBus } from '@/eventBus'
-import { useToast } from 'vue-toastification'
+import { eventBus } from '@/eventBus';
+import { useToast } from 'vue-toastification';
 
 export default {
   name: 'BaseHeader',
@@ -143,6 +148,7 @@ export default {
       navItems: [
         { to: '/', label: 'Trang chủ', icon: 'fas fa-home' },
         { to: '/map-bus', label: 'Map-Bus', icon: 'fas fa-map-marked-alt' },
+        { to: '/du-lieu', label: 'Truy xuất dữ liệu', icon: 'fas fa-database' },
         { to: '/quan-ly-nguoi-dung', label: 'Quản lý người dùng', icon: 'fas fa-users-cog' },
       ],
     }

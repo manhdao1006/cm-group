@@ -75,6 +75,7 @@ export default {
     return {
       map: null,
       markers: [],
+      circles: [],
       markerCluster: null,
       sheetId: '1azXTmdVEGAJkRxF6fxtVKt5LxMHo_Vp4xubCB_9wmSs',
       apiKey: 'AIzaSyBJOLTWvnRRegbkw1rRvr0K2dzV9SZ_Mwk',
@@ -84,6 +85,7 @@ export default {
       vehicleList: [],
       searchText: '',
       selectedVehicle: null,
+      lastDataHash: '',
     }
   },
   computed: {
@@ -98,7 +100,7 @@ export default {
   mounted() {
     this.initMap()
     this.fetchSheetData()
-    // setInterval(this.refreshMarkers, 10000)
+    setInterval(this.refreshIfSheetChanged, 5000)
   },
   methods: {
     getTimeAgo(dateString) {
@@ -138,22 +140,55 @@ export default {
       }, 200)
     },
 
+    async refreshIfSheetChanged() {
+      try {
+        const res = await fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}/values/${this.range}?key=${this.apiKey}`,
+        )
+        console.log(
+          `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}/values/${this.range}?key=${this.apiKey}`,
+        )
+
+        const data = await res.json()
+        if (!data.values) return
+
+        const newHash = JSON.stringify(data.values)
+
+        if (newHash !== this.lastDataHash) {
+          console.log('🟢 Sheet changed → Refreshing markers')
+          this.lastDataHash = newHash
+          await this.refreshMarkers()
+        } else {
+          console.log('🟡 Sheet unchanged → Skip refresh')
+        }
+      } catch (err) {
+        console.error('Error checking sheet:', err)
+      }
+    },
+
     async refreshMarkers() {
+      if (!this.map) return
+
+      // Lưu tâm và zoom hiện tại
       const currentCenter = this.map.getCenter()
       const currentZoom = this.map.getZoom()
-      this.map.closePopup()
-      this.markerCluster.clearLayers()
 
-      this.markers.forEach((m) => {
-        if (m instanceof L.Circle) {
-          this.map.removeLayer(m)
-          if (m._interval) clearInterval(m._interval)
-        }
-      })
+      // Lưu lại popup đang mở (nếu có)
+      const openedPopupVehicle = this.vehicleList.find((v) => v.marker && v.marker.isPopupOpen())
 
-      this.markers = []
+      // Làm mới dữ liệu, không fitBounds để tránh lệch tâm
       await this.fetchSheetData(false)
-      this.map.setView(currentCenter, currentZoom)
+
+      // Giữ nguyên vị trí người xem
+      this.map.setView(currentCenter, currentZoom, { animate: false })
+
+      // Nếu popup đang mở trước đó, mở lại popup đó
+      if (openedPopupVehicle) {
+        const newVehicle = this.vehicleList.find((v) => v.bienSoXe === openedPopupVehicle.bienSoXe)
+        if (newVehicle && newVehicle.marker) {
+          newVehicle.marker.openPopup()
+        }
+      }
     },
 
     async fetchSheetData(fitBounds = true) {
@@ -243,6 +278,9 @@ export default {
     },
     showMarkers(fitBounds) {
       this.markerCluster.clearLayers()
+      this.circles.forEach((c) => this.map.removeLayer(c))
+      this.circles = []
+
       this.markers = []
 
       const markersOnly = []
@@ -266,16 +304,22 @@ export default {
           radius: 200,
           weight: 2,
         }).addTo(this.map)
+        this.circles.push(circle)
 
         marker.bindPopup(this.generatePopupContent(v))
         marker.on('click', () => {
-          marker.openPopup()
+          this.selectedVehicle = v
           this.map.flyTo([v.lat, v.lng], 15)
+          marker.openPopup()
+        })
+        marker.on('popupclose', () => {
+          if (this.selectedVehicle === v) {
+            this.selectedVehicle = null
+          }
         })
 
         this.markerCluster.addLayer(marker)
         this.markers.push(marker)
-        this.markers.push(circle)
         markersOnly.push(marker)
         v.marker = marker
       })

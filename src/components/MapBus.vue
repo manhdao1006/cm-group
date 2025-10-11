@@ -31,8 +31,16 @@
                 <div class="badge bg-danger-subtle text-danger" style="font-size: 12px">
                   Cần cứu
                 </div>
+                <div class="text-black fst-italic ms-auto" style="font-size: 11px">
+                  ({{ getTimeAgo(item.ngayNhap) }})
+                </div>
               </div>
-              <div v-if="item.trangThai === '0'" class="dot-ping-green mb-1"></div>
+              <div v-if="item.trangThai === '0'" class="d-flex align-items-center mb-1">
+                <div class="dot-ping-green"></div>
+                <div class="text-black fst-italic ms-auto" style="font-size: 11px">
+                  ({{ getTimeAgo(item.ngayNhap) }})
+                </div>
+              </div>
               <strong>{{ item.tenXe }}</strong
               ><br />
               Biển số xe: {{ item.bienSoXe }}<br />
@@ -74,7 +82,7 @@ export default {
       darkMode: false,
       baseLayer: null,
       vehicleList: [],
-      searchText: '', // thêm dòng này
+      searchText: '',
       selectedVehicle: null,
     }
   },
@@ -93,6 +101,21 @@ export default {
     // setInterval(this.refreshMarkers, 10000)
   },
   methods: {
+    getTimeAgo(dateString) {
+      if (!dateString) return 'không xác định'
+      const date = new Date(dateString)
+      const now = new Date()
+      const diffMs = now - date
+      const diffSec = Math.floor(diffMs / 1000)
+      const diffMin = Math.floor(diffSec / 60)
+      const diffHour = Math.floor(diffMin / 60)
+      const diffDay = Math.floor(diffHour / 24)
+
+      if (diffMin < 1) return 'vừa xong'
+      if (diffMin < 60) return `${diffMin} phút trước`
+      if (diffHour < 24) return `${diffHour} giờ trước`
+      return `${diffDay} ngày trước`
+    },
     initMap() {
       if (this.map) {
         this.map.remove()
@@ -187,15 +210,13 @@ export default {
         })
       }
       vehicles.sort((a, b) => {
-        // ép về số để tránh lỗi string
         const ta = Number(a.trangThai)
         const tb = Number(b.trangThai)
 
-        if (ta !== tb) return tb - ta // 1 trước 0
-        return b.nhietDo - a.nhietDo // giảm dần nhiệt độ
+        if (ta !== tb) return tb - ta
+        return b.nhietDo - a.nhietDo
       })
 
-      // B3: hiển thị marker
       this.vehicleList = vehicles
       this.showMarkers(fitBounds)
       this.loadAddressesAsync()
@@ -205,7 +226,6 @@ export default {
         try {
           const address = await this.getAddressFromLatLng(v.lat, v.lng)
           v.address = address
-          // cập nhật lại popup nếu đang mở
           if (v.marker && v.marker.isPopupOpen()) {
             v.marker.setPopupContent(this.generatePopupContent(v))
           } else if (v.marker) {

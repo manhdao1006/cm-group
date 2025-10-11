@@ -83,23 +83,10 @@
             >
           </li>
           <li class="nav-item">
-            <a
-              class="nav-link"
-              href="#"
-              @click.prevent="
-                checkLoginExternal(
-                  'https://docs.google.com/spreadsheets/d/1azXTmdVEGAJkRxF6fxtVKt5LxMHo_Vp4xubCB_9wmSs/edit?gid=0#gid=0',
-                )
-              "
-            >
-              Truy xuất dữ liệu
-            </a>
-          </li>
-          <!-- <li class="nav-item">
             <router-link class="nav-link" to="/" @click.prevent="checkLogin('/du-lieu')"
               >Truy xuất dữ liệu</router-link
             >
-          </li> -->
+          </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/" @click.prevent="checkLogin('/quan-ly-nguoi-dung')"
               >Quản lý người dùng</router-link
@@ -114,7 +101,7 @@
     class="navbar navbar-expand-lg navbar-dark bg-dark-subtle w-100"
     style="padding-top: 5px; padding-bottom: 5px"
   >
-    <div class="container-fluid">
+    <div class="container">
       <div class="collapse navbar-collapse justify-content-start" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item" v-for="item in activeNavItems" :key="item.to">
@@ -135,8 +122,8 @@
 </template>
 
 <script>
-import { eventBus } from '@/eventBus';
-import { useToast } from 'vue-toastification';
+import { eventBus } from '@/eventBus'
+import { useToast } from 'vue-toastification'
 
 export default {
   name: 'BaseHeader',
@@ -175,13 +162,6 @@ export default {
     },
   },
   methods: {
-    checkLoginExternal(url) {
-      if (!this.user) {
-        this.toast.error('Bạn cần đăng nhập để truy cập!')
-        return
-      }
-      window.open(url, '_blank')
-    },
     checkLogin(path) {
       const protectedRoutes = ['/map-bus', '/quan-ly-nguoi-dung']
       if (!this.user && protectedRoutes.includes(path)) {

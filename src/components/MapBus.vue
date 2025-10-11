@@ -26,8 +26,13 @@
               @click="selectVehicle(item)"
               style="cursor: pointer; font-size: 12px"
             >
-              <div v-if="item.trangThai === '1'" class="dot-ping-red"></div>
-              <div v-if="item.trangThai === '0'" class="dot-ping-green"></div>
+              <div v-if="item.trangThai === '1'" class="d-flex align-items-center mb-1">
+                <div class="dot-ping-red me-1"></div>
+                <div class="badge bg-danger-subtle text-danger" style="font-size: 12px">
+                  Cần cứu
+                </div>
+              </div>
+              <div v-if="item.trangThai === '0'" class="dot-ping-green mb-1"></div>
               <strong>{{ item.tenXe }}</strong
               ><br />
               Biển số xe: {{ item.bienSoXe }}<br />
@@ -182,12 +187,12 @@ export default {
         })
       }
       vehicles.sort((a, b) => {
-        // So sánh nhiệt độ giảm dần
-        if (b.nhietDo !== a.nhietDo) {
-          return b.nhietDo - a.nhietDo
-        }
-        // Nếu nhiệt độ bằng nhau thì sắp xếp theo trạng thái (1 trước 0)
-        return b.trangThai.localeCompare(a.trangThai)
+        // ép về số để tránh lỗi string
+        const ta = Number(a.trangThai)
+        const tb = Number(b.trangThai)
+
+        if (ta !== tb) return tb - ta // 1 trước 0
+        return b.nhietDo - a.nhietDo // giảm dần nhiệt độ
       })
 
       // B3: hiển thị marker

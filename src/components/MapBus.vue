@@ -56,6 +56,12 @@
         </div>
       </div>
     </div>
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Đang tải...</span>
+      </div>
+      <div class="mt-2 text-primary fw-bold">Đang tải dữ liệu bản đồ...</div>
+    </div>
   </div>
 </template>
 
@@ -86,6 +92,10 @@ export default {
       searchText: '',
       selectedVehicle: null,
       lastDataHash: '',
+      isRefreshing: false,
+      isLoading: true,
+      prevMarkerCount: 0,
+      addressCache: {},
     }
   },
   computed: {
@@ -99,13 +109,20 @@ export default {
   },
   mounted() {
     this.initMap()
-    this.fetchSheetData()
-    setInterval(this.refreshIfSheetChanged, 5000)
+    setTimeout(async () => {
+      this.isLoading = true
+      await this.fetchSheetData()
+      this.isLoading = false
+      setInterval(this.refreshIfSheetChanged, 10000)
+    }, 1000)
   },
   methods: {
     getTimeAgo(dateString) {
       if (!dateString) return 'không xác định'
-      const date = new Date(dateString)
+      const [datePart, timePart] = dateString.split(' ')
+      const [day, month, year] = datePart.split('/')
+      const date = new Date(`${year}-${month}-${day}T${timePart}`)
+      if (isNaN(date)) return 'ngày không hợp lệ'
       const now = new Date()
       const diffMs = now - date
       const diffSec = Math.floor(diffMs / 1000)
@@ -141,6 +158,8 @@ export default {
     },
 
     async refreshIfSheetChanged() {
+      if (this.isRefreshing) return
+      this.isRefreshing = true
       try {
         const res = await fetch(
           `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}/values/${this.range}?key=${this.apiKey}`,
@@ -163,11 +182,14 @@ export default {
         }
       } catch (err) {
         console.error('Error checking sheet:', err)
+      } finally {
+        this.isRefreshing = false
       }
     },
 
     async refreshMarkers() {
       if (!this.map) return
+      this.isLoading = true
 
       // Lưu tâm và zoom hiện tại
       const currentCenter = this.map.getCenter()
@@ -189,6 +211,7 @@ export default {
           newVehicle.marker.openPopup()
         }
       }
+      this.isLoading = false
     },
 
     async fetchSheetData(fitBounds = true) {
@@ -203,7 +226,9 @@ export default {
 
       rows.forEach((row) => {
         const bienSoXe = row[1]
-        const ngayNhap = new Date(row[0])
+        const [datePart, timePart] = row[0].split(' ')
+        const [day, month, year] = datePart.split('/')
+        const ngayNhap = new Date(`${year}-${month}-${day}T${timePart}`)
         if (!latestByBienSo[bienSoXe] || ngayNhap > new Date(latestByBienSo[bienSoXe][0])) {
           latestByBienSo[bienSoXe] = row
         }
@@ -253,6 +278,12 @@ export default {
       })
 
       this.vehicleList = vehicles
+      const newCount = vehicles.length
+      if (newCount > this.prevMarkerCount) {
+        fitBounds = true
+      }
+
+      this.prevMarkerCount = newCount
       this.showMarkers(fitBounds)
       this.loadAddressesAsync()
     },
@@ -269,6 +300,7 @@ export default {
         } catch {
           v.address = 'Không xác định được địa chỉ'
         }
+        await new Promise((resolve) => setTimeout(resolve, 1300))
       }
     },
     generatePopupContent(v) {
@@ -326,15 +358,28 @@ export default {
 
       if (fitBounds && markersOnly.length > 0) {
         const group = L.featureGroup(markersOnly)
-        this.map.fitBounds(group.getBounds(), { padding: [50, 50] })
+        this.map.invalidateSize()
+        setTimeout(() => {
+          if (markersOnly.length === 1) {
+            this.map.setView(group.getBounds().getCenter(), 15)
+          } else {
+            this.map.fitBounds(group.getBounds(), { padding: [50, 50] })
+          }
+        }, 300)
       }
     },
     async getAddressFromLatLng(lat, lng) {
+      const key = `${lat.toFixed(6)},${lng.toFixed(6)}`
+      if (this.addressCache[key]) {
+        return this.addressCache[key]
+      }
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
       )
       const data = await response.json()
-      return data.display_name || 'Không xác định được địa chỉ'
+      const address = data.display_name || 'Không xác định được địa chỉ'
+      this.addressCache[key] = address
+      return address
     },
 
     flyToMarker(item) {
@@ -352,6 +397,20 @@ export default {
 </script>
 
 <style>
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .dot-ping-red {
   position: relative;
   width: 10px;

@@ -23,7 +23,7 @@ app.use(Toast, {
 
 // eslint-disable-next-line no-undef
 if (process.env.NODE_ENV === 'production') {
-  preventDevTools();
+  preventDevTools()
 }
 
 app.mount('#app')

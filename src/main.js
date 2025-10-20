@@ -1,6 +1,7 @@
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
+import preventDevTools from '@/utils/preventDevTools'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
@@ -19,5 +20,10 @@ app.use(Toast, {
   timeout: 3000,
   closeOnClick: true,
 })
+
+// eslint-disable-next-line no-undef
+if (process.env.NODE_ENV === 'production') {
+  preventDevTools();
+}
 
 app.mount('#app')

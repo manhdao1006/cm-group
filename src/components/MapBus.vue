@@ -251,8 +251,8 @@ export default {
           soDienThoai = '-',
         ] = row
 
-        const lat = parseFloat(latStr)
-        const lng = parseFloat(lngStr)
+        const lat = parseFloat(this.normalizeNumberString(latStr))
+        const lng = parseFloat(this.normalizeNumberString(lngStr, true))
         if (isNaN(lat) || isNaN(lng)) continue
 
         vehicles.push({
@@ -286,6 +286,26 @@ export default {
       this.prevMarkerCount = newCount
       this.showMarkers(fitBounds)
       this.loadAddressesAsync()
+    },
+    normalizeNumberString(str, isLng = false) {
+      if (!str) return ''
+
+      str = str.replace(/[^0-9.]/g, '')
+      const parts = str.split('.')
+      if (parts.length > 2) {
+        const integerPart = parts[0]
+        const decimalPart = parts.slice(1).join('')
+        str = `${integerPart}.${decimalPart}`
+      }
+
+      let num = parseFloat(str)
+      if (isNaN(num)) return ''
+
+      if (isLng && num < 11) {
+        num = num * 10
+      }
+
+      return parseFloat(num.toFixed(6)).toString()
     },
     async loadAddressesAsync() {
       for (const v of this.vehicleList) {

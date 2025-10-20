@@ -122,8 +122,8 @@
 </template>
 
 <script>
-import { eventBus } from '@/eventBus';
-import { useToast } from 'vue-toastification';
+import { eventBus } from '@/eventBus'
+import { useToast } from 'vue-toastification'
 
 export default {
   name: 'BaseHeader',

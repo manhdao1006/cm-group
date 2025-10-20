@@ -229,8 +229,19 @@ export default {
         const [datePart, timePart] = row[0].split(' ')
         const [day, month, year] = datePart.split('/')
         const ngayNhap = new Date(`${year}-${month}-${day}T${timePart}`)
-        if (!latestByBienSo[bienSoXe] || ngayNhap > new Date(latestByBienSo[bienSoXe][0])) {
-          latestByBienSo[bienSoXe] = row
+        if (bienSoXe && !isNaN(ngayNhap)) {
+          const current = latestByBienSo[bienSoXe]
+          if (!current) {
+            latestByBienSo[bienSoXe] = row
+          } else {
+            const [curDatePart, curTimePart] = current[0].split(' ')
+            const [curDay, curMonth, curYear] = curDatePart.split('/')
+            const currentNgayNhap = new Date(`${curYear}-${curMonth}-${curDay}T${curTimePart}`)
+
+            if (ngayNhap > currentNgayNhap) {
+              latestByBienSo[bienSoXe] = row
+            }
+          }
         }
       })
 
@@ -265,7 +276,11 @@ export default {
           nhietDo: parseFloat(nhietDo) || 0,
           maNhanVien,
           tenTaiXe,
-          soDienThoai,
+          soDienThoai: soDienThoai
+            ? soDienThoai.startsWith('84')
+              ? '+84 ' + soDienThoai.slice(2)
+              : soDienThoai
+            : '-',
           address: 'Đang tải...',
         })
       }

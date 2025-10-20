@@ -305,7 +305,7 @@ export default {
         num = num * 10
       }
 
-      return parseFloat(num.toFixed(6)).toString()
+      return num.toString()
     },
     async loadAddressesAsync() {
       for (const v of this.vehicleList) {

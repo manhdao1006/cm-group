@@ -63,7 +63,7 @@
                     {{ v.trangThai === '1' ? 'Hoạt động' : 'Tắt' }}
                   </span>
                 </td>
-                <td>{{ formatDate(v.ngayNhap) }}</td>
+                <td>{{ v.ngayNhap }}</td>
               </tr>
             </tbody>
           </table>
@@ -110,9 +110,8 @@
 </template>
 
 <script>
-import moment from 'moment'
-import * as XLSX from 'xlsx'
-import BaseHeader from './common/BaseHeader.vue'
+import * as XLSX from 'xlsx';
+import BaseHeader from './common/BaseHeader.vue';
 
 export default {
   name: 'TruyXuatDuLieu',
@@ -160,10 +159,6 @@ export default {
   },
 
   methods: {
-    formatDate(value) {
-      return value ? moment(value).format('DD/MM/YYYY HH:mm') : ''
-    },
-
     prevPage() {
       if (this.currentPage > 1) this.currentPage--
     },
@@ -186,7 +181,7 @@ export default {
         'Số điện thoại': v.soDienThoai,
         'Địa chỉ': v.address,
         'Trạng thái': v.trangThai === '1' ? 'Hoạt động' : 'Tắt',
-        'Ngày nhập': this.formatDate(v.ngayNhap),
+        'Ngày nhập': v.ngayNhap,
       }))
 
       const ws = XLSX.utils.json_to_sheet(data)
@@ -208,9 +203,23 @@ export default {
 
         rows.forEach((row) => {
           const bienSoXe = row[1]
-          const ngayNhap = new Date(row[0])
-          if (!latestByBienSo[bienSoXe] || ngayNhap > new Date(latestByBienSo[bienSoXe][0])) {
-            latestByBienSo[bienSoXe] = row
+          const [datePart, timePart] = row[0].split(' ')
+          const [day, month, year] = datePart.split('/')
+          const ngayNhap = new Date(`${year}-${month}-${day}T${timePart}`)
+
+          if (bienSoXe && !isNaN(ngayNhap)) {
+            const current = latestByBienSo[bienSoXe]
+            if (!current) {
+              latestByBienSo[bienSoXe] = row
+            } else {
+              const [curDatePart, curTimePart] = current[0].split(' ')
+              const [curDay, curMonth, curYear] = curDatePart.split('/')
+              const currentNgayNhap = new Date(`${curYear}-${curMonth}-${curDay}T${curTimePart}`)
+
+              if (ngayNhap > currentNgayNhap) {
+                latestByBienSo[bienSoXe] = row
+              }
+            }
           }
         })
 
@@ -231,8 +240,8 @@ export default {
             soDienThoai = '-',
           ] = row
 
-          const lat = parseFloat(latStr)
-          const lng = parseFloat(lngStr)
+          const lat = parseFloat(this.normalizeNumberString(latStr))
+          const lng = parseFloat(this.normalizeNumberString(lngStr, true))
           if (isNaN(lat) || isNaN(lng)) continue
 
           vehicles.push({
@@ -245,7 +254,11 @@ export default {
             nhietDo: parseFloat(nhietDo) || 0,
             maNhanVien,
             tenTaiXe,
-            soDienThoai,
+            soDienThoai: soDienThoai
+              ? soDienThoai.startsWith('84')
+                ? '+84 ' + soDienThoai.slice(2)
+                : soDienThoai
+              : '-',
             address: 'Đang tải...',
           })
         }
@@ -255,6 +268,27 @@ export default {
       } catch (error) {
         console.error('Lỗi tải dữ liệu:', error)
       }
+    },
+
+    normalizeNumberString(str, isLng = false) {
+      if (!str) return ''
+
+      str = str.replace(/[^0-9.]/g, '')
+      const parts = str.split('.')
+      if (parts.length > 2) {
+        const integerPart = parts[0]
+        const decimalPart = parts.slice(1).join('')
+        str = `${integerPart}.${decimalPart}`
+      }
+
+      let num = parseFloat(str)
+      if (isNaN(num)) return ''
+
+      if (isLng && num < 11) {
+        num = num * 10
+      }
+
+      return num.toString()
     },
 
     async loadAddressesAsync() {

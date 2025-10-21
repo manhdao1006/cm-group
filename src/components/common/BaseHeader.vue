@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-banner w-100">
     <div class="container-fluid row fw-bolder" style="font-size: 12px">
       <div class="col-6 row">
-        <div class="col-6"></div>
+        <div class="col-6"><LanguageSwitcher /></div>
         <div class="col-6"></div>
       </div>
 
@@ -39,7 +39,7 @@
           </div>
           <div class="col-4 logout-btn" @click="logout">
             <i class="fas fa-sign-out-alt"></i>
-            <span class="ms-2">Đăng xuất</span>
+            <span class="ms-2">{{ $t('header.navigation.logout') }}</span>
           </div>
         </template>
       </div>
@@ -73,23 +73,26 @@
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav text-capitalize">
           <li class="nav-item">
-            <router-link class="nav-link" to="/" @click.prevent="checkLogin('/')"
-              >Trang chủ</router-link
-            >
+            <router-link class="nav-link" to="/" @click.prevent="checkLogin('/')">{{
+              $t('header.navigation.homePage')
+            }}</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/map-bus" @click.prevent="checkLogin('/map-bus')"
-              >Map-Bus</router-link
-            >
+            <router-link class="nav-link" to="/map-bus" @click.prevent="checkLogin('/map-bus')">{{
+              $t('header.navigation.mapBus')
+            }}</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/" @click.prevent="checkLogin('/du-lieu')"
-              >Truy xuất dữ liệu</router-link
-            >
+            <router-link class="nav-link" to="/du-lieu" @click.prevent="checkLogin('/du-lieu')">{{
+              $t('header.navigation.data')
+            }}</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/" @click.prevent="checkLogin('/quan-ly-nguoi-dung')"
-              >Quản lý người dùng</router-link
+            <router-link
+              class="nav-link"
+              to="/quan-ly-nguoi-dung"
+              @click.prevent="checkLogin('/quan-ly-nguoi-dung')"
+              >{{ $t('header.navigation.account') }}</router-link
             >
           </li>
         </ul>
@@ -124,20 +127,19 @@
 <script>
 import { eventBus } from '@/eventBus'
 import { useToast } from 'vue-toastification'
+import LanguageSwitcher from '../LanguageSwitcher.vue'
 
 export default {
   name: 'BaseHeader',
+  components: {
+    LanguageSwitcher,
+  },
   data() {
     return {
       user: null,
       clientId: '954414108201-06v6lu48msd5hu6jkfgc77sit28i3gvl.apps.googleusercontent.com',
       toast: null,
-      navItems: [
-        { to: '/', label: 'Trang chủ', icon: 'fas fa-home' },
-        { to: '/map-bus', label: 'Map-Bus', icon: 'fas fa-map-marked-alt' },
-        { to: '/du-lieu', label: 'Truy xuất dữ liệu', icon: 'fas fa-database' },
-        { to: '/quan-ly-nguoi-dung', label: 'Quản lý người dùng', icon: 'fas fa-users-cog' },
-      ],
+      navItems: [],
     }
   },
   mounted() {
@@ -146,6 +148,7 @@ export default {
     this.loadGoogleScript()
     window.handleCredentialResponse = this.handleCredentialResponse
     this.toast = useToast()
+    this.setNavItems()
   },
   computed: {
     activeNavItems() {
@@ -161,11 +164,32 @@ export default {
       })
     },
   },
+  watch: {
+    '$i18n.locale'() {
+      this.setNavItems()
+    },
+  },
   methods: {
+    setNavItems() {
+      this.navItems = [
+        { to: '/', label: this.$t('header.navigation.homePage'), icon: 'fas fa-home' },
+        {
+          to: '/map-bus',
+          label: this.$t('header.navigation.mapBus'),
+          icon: 'fas fa-map-marked-alt',
+        },
+        { to: '/du-lieu', label: this.$t('header.navigation.data'), icon: 'fas fa-database' },
+        {
+          to: '/quan-ly-nguoi-dung',
+          label: this.$t('header.navigation.account'),
+          icon: 'fas fa-users-cog',
+        },
+      ]
+    },
     checkLogin(path) {
       const protectedRoutes = ['/map-bus', '/quan-ly-nguoi-dung']
       if (!this.user && protectedRoutes.includes(path)) {
-        this.toast.error('Bạn cần đăng nhập để truy cập!')
+        this.toast.error(this.$t('notification.checkLogin'))
         return
       }
 
@@ -215,14 +239,14 @@ export default {
         const data = await res.json()
 
         if (data.status === 'success') {
-          this.message = 'Lưu thông tin thành công!'
+          this.message = this.$t('notification.successSave')
           this.success = true
         } else {
-          this.message = 'Lỗi: ' + data.message
+          this.message = this.$t('notification.error') + data.message
           this.success = false
         }
       } catch (err) {
-        this.message = 'Lỗi: ' + err.message
+        this.message = this.$t('notification.error') + err.message
         this.success = false
       }
       this.$router.push('/')

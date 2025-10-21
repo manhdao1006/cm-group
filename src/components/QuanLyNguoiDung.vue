@@ -17,7 +17,9 @@
           </div>
 
           <div class="mb-3 row g-2 align-items-center visually-hidden">
-            <label class="col-auto col-form-label me-1 pe-1">Link ảnh:</label>
+            <label class="col-auto col-form-label me-1 pe-1"
+              >{{ $t('user.label.imageLink') }}:</label
+            >
             <div class="col">
               <input v-model="form.linkAnh" type="text" class="form-control" />
             </div>
@@ -27,7 +29,7 @@
         <div class="col-12 col-md-9">
           <div class="mb-3 row g-2 align-items-center">
             <div class="col-3">
-              <label class="col-auto col-form-label">Họ:</label>
+              <label class="col-auto col-form-label">{{ $t('user.label.surname') }}:</label>
             </div>
             <div class="col-6">
               <input v-model="form.ho" type="text" class="form-control" />
@@ -36,7 +38,7 @@
 
           <div class="mb-3 row g-2 align-items-center">
             <div class="col-3">
-              <label class="col-auto col-form-label">Tên:</label>
+              <label class="col-auto col-form-label">{{ $t('user.label.name') }}:</label>
             </div>
             <div class="col-6">
               <input v-model="form.ten" type="text" class="form-control" />
@@ -45,7 +47,7 @@
 
           <div class="mb-3 row g-2 align-items-center">
             <div class="col-3">
-              <label class="col-auto col-form-label">Họ và tên:</label>
+              <label class="col-auto col-form-label">{{ $t('user.label.fullname') }}:</label>
             </div>
             <div class="col-6">
               <input v-model="form.hoVaTen" type="text" class="form-control" />
@@ -54,7 +56,7 @@
 
           <div class="mb-3 row g-2 align-items-center">
             <div class="col-3">
-              <label class="col-auto col-form-label">Ngày sinh:</label>
+              <label class="col-auto col-form-label">{{ $t('user.label.dob') }}:</label>
             </div>
             <div class="col-6">
               <input v-model="form.ngaySinh" type="date" class="form-control" />
@@ -63,7 +65,7 @@
 
           <div class="mb-3 row g-2 align-items-center">
             <div class="col-3">
-              <label class="col-auto col-form-label">Số điện thoại:</label>
+              <label class="col-auto col-form-label">{{ $t('user.label.phoneNumber') }}:</label>
             </div>
             <div class="col-6">
               <input v-model="form.soDienThoai" type="tel" class="form-control" />
@@ -72,7 +74,7 @@
 
           <div class="mb-3 row g-2 align-items-center">
             <div class="col-3">
-              <label class="col-auto col-form-label">Email:</label>
+              <label class="col-auto col-form-label">{{ $t('user.label.email') }}:</label>
             </div>
             <div class="col-6">
               <input v-model="form.email" type="email" class="form-control" />
@@ -81,7 +83,7 @@
 
           <div class="mb-3 row g-2 align-items-center">
             <div class="col-3">
-              <label class="col-auto col-form-label">Địa chỉ:</label>
+              <label class="col-auto col-form-label">{{ $t('user.label.address') }}:</label>
             </div>
             <div class="col-6">
               <input v-model="form.diaChi" type="text" class="form-control" />
@@ -91,7 +93,9 @@
       </div>
 
       <div class="mt-3 text-center">
-        <button type="submit" class="btn btn-primary" :disabled="loading">Lưu thông tin</button>
+        <button type="submit" class="btn btn-primary" :disabled="loading">
+          {{ $t('user.button.save') }}
+        </button>
       </div>
     </form>
 
@@ -189,7 +193,7 @@ export default {
           }
         }
       } catch (err) {
-        this.toast.error('Lỗi load dữ liệu: ' + err.message)
+        this.toast.error(this.$t('notification.error') + err.message)
       } finally {
         this.loading = false
       }
@@ -213,16 +217,16 @@ export default {
         const data = await res.json()
 
         if (data.status === 'success') {
-          this.message = 'Lưu thông tin thành công!'
+          this.message = this.$t('notification.successSave')
           this.success = true
           this.toast.success(this.message)
         } else {
-          this.message = 'Lỗi: ' + data.message
+          this.message = this.$t('notification.error') + data.message
           this.success = false
           this.toast.error(this.message)
         }
       } catch (err) {
-        this.message = 'Lỗi: ' + err.message
+        this.message = this.$t('notification.error') + err.message
         this.success = false
         this.toast.error(this.message)
       } finally {

@@ -11,24 +11,24 @@
               v-model="searchText"
               type="text"
               class="form-control"
-              placeholder="Tìm kiếm theo tên xe, biển số, hoặc tài xế"
+              :placeholder="$t('data.button.search')"
             />
           </div>
           <div class="col-md-3">
             <select v-model="filterStatus" class="form-select">
-              <option value="">Tất cả trạng thái</option>
-              <option value="1">Đang hoạt động</option>
-              <option value="0">Tắt máy</option>
+              <option value="">{{ $t('data.button.filter.all') }}</option>
+              <option value="1">{{ $t('data.button.filter.active') }}</option>
+              <option value="0">{{ $t('data.button.filter.inactive') }}</option>
             </select>
           </div>
           <div class="col-md-2">
             <button class="btn btn-primary w-100" @click="fetchSheetData">
-              <i class="fas fa-sync-alt"></i> Tải lại
+              <i class="fas fa-sync-alt"></i> {{ $t('data.button.reload') }}
             </button>
           </div>
           <div class="col-md-3 text-end">
             <button class="btn btn-success w-100" @click="exportToExcel">
-              <i class="fas fa-file-excel"></i> Xuất Excel
+              <i class="fas fa-file-excel"></i> {{ $t('data.button.exportExcel') }}
             </button>
           </div>
         </div>
@@ -38,15 +38,15 @@
           <table class="table table-striped table-bordered align-middle text-center">
             <thead class="table-light">
               <tr>
-                <th>STT</th>
-                <th>Biển số</th>
-                <th>Tên xe</th>
-                <th>Nhiệt độ (°C)</th>
-                <th>Tài xế</th>
-                <th>Số điện thoại</th>
-                <th>Địa chỉ</th>
-                <th>Trạng thái</th>
-                <th>Ngày nhập</th>
+                <th>{{ $t('data.table.no') }}</th>
+                <th>{{ $t('data.table.licenseNumber') }}</th>
+                <th>{{ $t('data.table.carName') }}</th>
+                <th>{{ $t('data.table.temperature') }}</th>
+                <th>{{ $t('data.table.driverName') }}</th>
+                <th>{{ $t('data.table.phoneNumber') }}</th>
+                <th>{{ $t('data.table.address') }}</th>
+                <th>{{ $t('data.table.status') }}</th>
+                <th>{{ $t('data.table.createDate') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -60,7 +60,7 @@
                 <td>{{ v.address }}</td>
                 <td>
                   <span class="badge" :class="v.trangThai === '1' ? 'bg-success' : 'bg-secondary'">
-                    {{ v.trangThai === '1' ? 'Hoạt động' : 'Tắt' }}
+                    {{ v.trangThai === '1' ? $t('data.table.active') : $t('data.table.inactive') }}
                   </span>
                 </td>
                 <td>{{ v.ngayNhap }}</td>
@@ -69,24 +69,26 @@
           </table>
 
           <div v-if="filteredVehicleList.length === 0" class="text-center py-3 text-muted">
-            Không có dữ liệu phù hợp.
+            {{ $t('data.table.noData') }}
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-center mt-3">
           <div>
-            Hiển thị
+            {{ $t('data.pagination.display') }}
             <select v-model.number="itemsPerPage" class="form-select d-inline w-auto mx-2">
               <option :value="5">5</option>
               <option :value="10">10</option>
               <option :value="20">20</option>
             </select>
-            hàng mỗi trang
+            {{ $t('data.pagination.rowPerPage') }}
           </div>
 
           <nav>
             <ul class="pagination mb-0">
               <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <button class="page-link" @click="prevPage">Trước</button>
+                <button class="page-link" @click="prevPage">
+                  {{ $t('data.button.firstPage') }}
+                </button>
               </li>
               <li
                 v-for="page in totalPages"
@@ -99,7 +101,9 @@
                 </button>
               </li>
               <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                <button class="page-link" @click="nextPage">Sau</button>
+                <button class="page-link" @click="nextPage">
+                  {{ $t('data.button.lastPage') }}
+                </button>
               </li>
             </ul>
           </nav>
@@ -110,8 +114,8 @@
 </template>
 
 <script>
-import * as XLSX from 'xlsx';
-import BaseHeader from './common/BaseHeader.vue';
+import * as XLSX from 'xlsx'
+import BaseHeader from './common/BaseHeader.vue'
 
 export default {
   name: 'TruyXuatDuLieu',
@@ -174,14 +178,15 @@ export default {
     exportToExcel() {
       const data = this.filteredVehicleList.map((v, i) => ({
         STT: i + 1,
-        'Biển số': v.bienSoXe,
-        'Tên xe': v.tenXe,
-        'Nhiệt độ (°C)': v.nhietDo,
-        'Tài xế': v.tenTaiXe,
-        'Số điện thoại': v.soDienThoai,
-        'Địa chỉ': v.address,
-        'Trạng thái': v.trangThai === '1' ? 'Hoạt động' : 'Tắt',
-        'Ngày nhập': v.ngayNhap,
+        [this.$t('data.table.licenseNumber')]: v.bienSoXe,
+        [this.$t('data.table.carName')]: v.tenXe,
+        [this.$t('data.table.temperature')]: v.nhietDo,
+        [this.$t('data.table.driverName')]: v.tenTaiXe,
+        [this.$t('data.table.phoneNumber')]: v.soDienThoai,
+        [this.$t('data.table.address')]: v.address,
+        [this.$t('data.table.status')]:
+          v.trangThai === '1' ? [this.$t('data.table.active')] : [this.$t('data.table.inactive')],
+        [this.$t('data.table.createDate')]: v.ngayNhap,
       }))
 
       const ws = XLSX.utils.json_to_sheet(data)
@@ -259,7 +264,7 @@ export default {
                 ? '+84 ' + soDienThoai.slice(2)
                 : soDienThoai
               : '-',
-            address: 'Đang tải...',
+            address: this.$t('data.loading'),
           })
         }
 
@@ -298,9 +303,9 @@ export default {
             `https://nominatim.openstreetmap.org/reverse?lat=${v.lat}&lon=${v.lng}&format=json`,
           )
           const json = await res.json()
-          v.address = json.display_name || 'Không xác định'
+          v.address = json.display_name || this.$t('data.unknown')
         } catch {
-          v.address = 'Không xác định'
+          v.address = this.$t('data.unknown')
         }
       }
     },

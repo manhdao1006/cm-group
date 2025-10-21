@@ -1,0 +1,87 @@
+export default {
+  notification: {
+    checkLogin: 'Bạn cần đăng nhập để truy cập!',
+    successSave: 'Lưu thông tin thành công!',
+    error: 'Lỗi: ',
+  },
+  header: {
+    navigation: {
+      logout: 'Đăng xuất',
+      homePage: 'Trang chủ',
+      mapBus: 'Map-Bus',
+      data: 'Truy xuất dữ liệu',
+      account: 'Quản lý người dùng',
+    },
+  },
+  homePage: {
+    welcome: 'Xin chào',
+    content:
+      'Đây là hệ thống giám sát xe đưa đón học sinh giúp theo dõi vị trí xe theo thời gian thực, quản lý học sinh lên xuống, và cảnh báo khi có sự cố, nhằm đảm bảo an toàn và hỗ trợ nhà trường quản lý hiệu quả.',
+    valid: 'Vui lòng đăng nhập để tiếp tục.',
+  },
+  map: {
+    search: 'Tìm kiếm theo tên hoặc mã tài xế',
+    emergency: 'Cần cứu',
+    licenseNumber: 'Biển số xe',
+    temperature: 'Nhiệt độ (°C)',
+    driverName: 'Tên tài xế',
+    phoneNumber: 'Số điện thoại',
+    address: 'Địa chỉ',
+    loading: 'Đang tải...',
+    unknown: 'Không xác định',
+    invalidDate: 'Ngày không hợp lệ',
+    now: 'vừa xong',
+    minutesAgo: 'phút trước',
+    hoursAgo: 'giờ trước',
+    daysAgo: 'ngày trước',
+  },
+  data: {
+    unknown: 'Không xác định',
+    loading: 'Đang tải...',
+    table: {
+      no: 'STT',
+      licenseNumber: 'Biển số',
+      carName: 'Tên xe',
+      temperature: 'Nhiệt độ (°C)',
+      driverName: 'Tài xế',
+      phoneNumber: 'Số điện thoại',
+      address: 'Địa chỉ',
+      status: 'Trạng thái',
+      createDate: 'Ngày nhập',
+      active: 'Hoạt động',
+      inactive: 'Tắt',
+      noData: 'Không có dữ liệu phù hợp.',
+    },
+    button: {
+      search: 'Tìm kiếm theo tên xe, biển số, hoặc tài xế',
+      filter: {
+        all: 'Tất cả trạng thái',
+        active: 'Đang hoạt động',
+        inactive: 'Tắt máy',
+      },
+      reload: 'Tải lại',
+      exportExcel: 'Xuất Excel',
+      firstPage: 'Trước',
+      lastPage: 'Sau',
+    },
+    pagination: {
+      display: 'Hiển thị',
+      rowPerPage: 'hàng mỗi trang',
+    },
+  },
+  user: {
+    label: {
+      imageLink: 'Link ảnh',
+      surname: 'Họ',
+      name: 'Tên',
+      fullname: 'Họ và tên',
+      dob: 'Ngày sinh',
+      phoneNumber: 'Số điện thoại',
+      email: 'Email',
+      address: 'Địa chỉ',
+    },
+    button: {
+      save: 'Lưu',
+    },
+  },
+}

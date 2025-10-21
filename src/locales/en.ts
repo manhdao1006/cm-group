@@ -1,0 +1,87 @@
+export default {
+  notification: {
+    checkLogin: 'You need to log in to access!',
+    successSave: 'Information saved successfully!',
+    error: 'Error: ',
+  },
+  header: {
+    navigation: {
+      logout: 'Log out',
+      homePage: 'Home',
+      mapBus: 'Map-Bus',
+      data: 'Retrieve data',
+      account: 'Manage users',
+    },
+  },
+  homePage: {
+    welcome: 'Hello',
+    content:
+      'This is a school bus monitoring system that helps track the vehicle location in real time, manage students getting on and off, and alert when there is an incident, to ensure safety and support the school in effective management.',
+    valid: 'Please log in to continue.',
+  },
+  map: {
+    search: 'Search by driver name or code',
+    emergency: 'Emergency',
+    licenseNumber: 'Car license plate',
+    temperature: 'Temperature (°C)',
+    driverName: 'Driver name',
+    phoneNumber: 'Phone number',
+    address: 'Address',
+    loading: 'Loading...',
+    unknown: 'Unknown',
+    invalidDate: 'Invalid date',
+    now: 'just now',
+    minutesAgo: 'minute ago',
+    hoursAgo: 'hour ago',
+    daysAgo: 'day ago',
+  },
+  data: {
+    unknown: 'Unknown',
+    loading: 'Loading...',
+    table: {
+      no: 'STT',
+      licenseNumber: 'License Plate',
+      carName: 'Car Name',
+      temperature: 'Temperature (°C)',
+      driverName: 'Driver',
+      phoneNumber: 'Phone Number',
+      address: 'Address',
+      status: 'Status',
+      createDate: 'Import Date',
+      active: 'Active',
+      inactive: 'Off',
+      noData: 'No matching data.',
+    },
+    button: {
+      search: 'Search by vehicle name, license plate, or driver',
+      filter: {
+        all: 'All statuses',
+        active: 'Active',
+        inactive: 'Off',
+      },
+      reload: 'Reload',
+      exportExcel: 'Export Excel',
+      firstPage: 'Previous',
+      lastPage: 'Next',
+    },
+    pagination: {
+      display: 'Display',
+      rowPerPage: 'rows per page',
+    },
+  },
+  user: {
+    label: {
+      imageLink: 'Image Link',
+      surname: 'Last name',
+      name: 'First name',
+      fullname: 'Last name',
+      dob: 'Date of birth',
+      phoneNumber: 'Phone number',
+      email: 'Email',
+      address: 'Address',
+    },
+    button: {
+      save: 'Save',
+    },
+  },
+}

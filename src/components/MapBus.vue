@@ -8,7 +8,7 @@
           <input
             type="text"
             class="form-control mb-2"
-            placeholder="Tìm kiếm theo tên hoặc mã tài xế"
+            :placeholder="$t('map.search')"
             v-model="searchText"
           />
           <ul
@@ -29,7 +29,7 @@
               <div v-if="item.trangThai === '1'" class="d-flex align-items-center mb-1">
                 <div class="dot-ping-red me-1"></div>
                 <div class="badge bg-danger-subtle text-danger" style="font-size: 12px">
-                  Cần cứu
+                  {{ $t('map.emergency') }}
                 </div>
                 <div class="text-black fst-italic ms-auto" style="font-size: 11px">
                   ({{ getTimeAgo(item.ngayNhap) }})
@@ -43,10 +43,10 @@
               </div>
               <strong>{{ item.tenXe }}</strong
               ><br />
-              Biển số xe: {{ item.bienSoXe }}<br />
-              Nhiệt độ: {{ item.nhietDo }}<br />
-              Tên tài xế: {{ item.tenTaiXe }}<br />
-              Số điện thoại: {{ item.soDienThoai }}<br />
+              {{ $t('map.licenseNumber') }}: {{ item.bienSoXe }}<br />
+              {{ $t('map.temperature') }}: {{ item.nhietDo }}<br />
+              {{ $t('map.driverName') }}: {{ item.tenTaiXe }}<br />
+              {{ $t('map.phoneNumber') }}: {{ item.soDienThoai }}<br />
             </li>
           </ul>
         </div>
@@ -58,9 +58,9 @@
     </div>
     <div v-if="isLoading" class="loading-overlay">
       <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Đang tải...</span>
+        <span class="visually-hidden">{{ $t('map.loading') }}</span>
       </div>
-      <div class="mt-2 text-primary fw-bold">Đang tải dữ liệu bản đồ...</div>
+      <div class="mt-2 text-primary fw-bold">{{ $t('map.loading') }}</div>
     </div>
   </div>
 </template>
@@ -118,11 +118,11 @@ export default {
   },
   methods: {
     getTimeAgo(dateString) {
-      if (!dateString) return 'không xác định'
+      if (!dateString) return this.$t('map.unknown')
       const [datePart, timePart] = dateString.split(' ')
       const [day, month, year] = datePart.split('/')
       const date = new Date(`${year}-${month}-${day}T${timePart}`)
-      if (isNaN(date)) return 'ngày không hợp lệ'
+      if (isNaN(date)) return this.$t('map.invalidDate')
       const now = new Date()
       const diffMs = now - date
       const diffSec = Math.floor(diffMs / 1000)
@@ -130,10 +130,10 @@ export default {
       const diffHour = Math.floor(diffMin / 60)
       const diffDay = Math.floor(diffHour / 24)
 
-      if (diffMin < 1) return 'vừa xong'
-      if (diffMin < 60) return `${diffMin} phút trước`
-      if (diffHour < 24) return `${diffHour} giờ trước`
-      return `${diffDay} ngày trước`
+      if (diffMin < 1) return this.$t('map.now')
+      if (diffMin < 60) return `${diffMin} ${this.$t('map.minutesAgo')}`
+      if (diffHour < 24) return `${diffHour} ${this.$t('map.hoursAgo')}`
+      return `${diffDay} ${this.$t('map.daysAgo')}`
     },
     initMap() {
       if (this.map) {
@@ -281,7 +281,7 @@ export default {
               ? '+84 ' + soDienThoai.slice(2)
               : soDienThoai
             : '-',
-          address: 'Đang tải...',
+          address: this.$t('map.address'),
         })
       }
       vehicles.sort((a, b) => {
@@ -333,15 +333,13 @@ export default {
             v.marker.bindPopup(this.generatePopupContent(v))
           }
         } catch {
-          v.address = 'Không xác định được địa chỉ'
+          v.address = this.$t('map.unknown')
         }
         await new Promise((resolve) => setTimeout(resolve, 1300))
       }
     },
     generatePopupContent(v) {
-      return `
-        Địa chỉ: ${v.address}
-      `
+      return v.address
     },
     showMarkers(fitBounds) {
       this.markerCluster.clearLayers()

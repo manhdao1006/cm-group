@@ -16,7 +16,7 @@ export default {
   homePage: {
     welcome: 'Hello',
     content:
-      'This is a school bus monitoring system that helps track the vehicle location in real time, manage students getting on and off, and alert when there is an incident, to ensure safety and support the school in effective management.',
+      'This is a school bus monitoring system that helps track the vehicle location in real time, manage students getting on and off, and warn when there are incidents, to ensure safety and support the school in effective management. Researched and manufactured by students and Dr. Nguyen Phu Sinh.',
     valid: 'Please log in to continue.',
   },
   map: {

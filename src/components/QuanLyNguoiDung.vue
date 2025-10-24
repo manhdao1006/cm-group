@@ -146,13 +146,30 @@ export default {
     this.toast = useToast()
   },
   methods: {
+    toInputDate(value) {
+      if (!value) return ''
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value
+      const parts = value.split('/')
+      if (parts.length === 3) {
+        const [day, month, year] = parts
+        return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+      }
+      const d = new Date(value)
+      if (!isNaN(d.getTime())) {
+        const y = d.getFullYear()
+        const m = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        return `${y}-${m}-${day}`
+      }
+      return ''
+    },
     async loadDataByEmail(email) {
       this.loading = true
       try {
         const SHEET_URL =
-          'https://script.google.com/macros/s/AKfycbz2-Nv7ijJwAdHIQeV3RV2r23kSlHrmTB9SbnmExVdBiYToG_P-zZd8XlNdfeLqYyYF/exec?' +
+          'https://script.google.com/macros/s/AKfycbwLVCQ8MP03YK4EfC241DEl8VQIOCxQc0nivgeQY3NPKexeoAqZ7zaptXjks9tFMARK/exec?' +
           new URLSearchParams({
-            action: 'get',
+            action: 'getAllByEmail',
             email: email,
           }).toString()
 
@@ -160,24 +177,16 @@ export default {
         const result = await res.json()
 
         if (result.status === 'success' && result.data) {
-          const [ho, ten, hoVaTen, ngaySinhRaw, soDienThoai, email, diaChi, , linkAnh] = result.data
-          let ngaySinh = ''
-          if (ngaySinhRaw) {
-            const d = new Date(ngaySinhRaw)
-            const year = d.getFullYear()
-            const month = String(d.getMonth() + 1).padStart(2, '0')
-            const day = String(d.getDate()).padStart(2, '0')
-            ngaySinh = `${year}-${month}-${day}`
-          }
+          const latest = result.data
 
-          this.form.ho = ho
-          this.form.ten = ten
-          this.form.hoVaTen = hoVaTen
-          this.form.ngaySinh = ngaySinh
-          this.form.soDienThoai = soDienThoai
-          this.form.email = email
-          this.form.diaChi = diaChi
-          if (linkAnh) this.form.linkAnh = linkAnh
+          this.form.ho = latest.ho || ''
+          this.form.ten = latest.ten || ''
+          this.form.hoVaTen = latest.hoVaTen || ''
+          this.form.ngaySinh = this.toInputDate(latest.ngaySinh)
+          this.form.soDienThoai = latest.soDienThoai || ''
+          this.form.email = latest.email || email
+          this.form.diaChi = latest.diaChi || ''
+          this.form.linkAnh = latest.linkAnh || this.form.linkAnh
         } else {
           const storedUser = localStorage.getItem('googleUser')
           if (storedUser) {
@@ -185,10 +194,7 @@ export default {
             this.form.ho = user.family_name || ''
             this.form.ten = user.given_name || ''
             this.form.hoVaTen = user.name || ''
-            this.form.ngaySinh = ''
-            this.form.soDienThoai = ''
             this.form.email = user.email || ''
-            this.form.diaChi = ''
             this.form.linkAnh = user.picture || ''
           }
         }
@@ -206,11 +212,10 @@ export default {
           action: 'save',
           ...this.form,
           soDienThoai: String(this.form.soDienThoai),
-          ngayTao: new Date().toISOString(),
         }).toString()
 
         const SHEET_URL =
-          'https://script.google.com/macros/s/AKfycbz2-Nv7ijJwAdHIQeV3RV2r23kSlHrmTB9SbnmExVdBiYToG_P-zZd8XlNdfeLqYyYF/exec?' +
+          'https://script.google.com/macros/s/AKfycbwLVCQ8MP03YK4EfC241DEl8VQIOCxQc0nivgeQY3NPKexeoAqZ7zaptXjks9tFMARK/exec?' +
           params
 
         const res = await fetch(SHEET_URL)

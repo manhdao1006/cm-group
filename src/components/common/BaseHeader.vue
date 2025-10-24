@@ -228,11 +228,10 @@ export default {
           hoVaTen: this.user.name,
           email: this.user.email,
           linkAnh: this.user.picture,
-          ngayTao: new Date().toISOString(),
         }).toString()
 
         const SHEET_URL =
-          'https://script.google.com/macros/s/AKfycbz2-Nv7ijJwAdHIQeV3RV2r23kSlHrmTB9SbnmExVdBiYToG_P-zZd8XlNdfeLqYyYF/exec?' +
+          'https://script.google.com/macros/s/AKfycbwLVCQ8MP03YK4EfC241DEl8VQIOCxQc0nivgeQY3NPKexeoAqZ7zaptXjks9tFMARK/exec?' +
           params
 
         const res = await fetch(SHEET_URL)

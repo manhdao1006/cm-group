@@ -118,10 +118,7 @@ export default {
   },
   methods: {
     getTimeAgo(dateString) {
-      if (!dateString) return this.$t('map.unknown')
-      const [datePart, timePart] = dateString.split(' ')
-      const [day, month, year] = datePart.split('/')
-      const date = new Date(`${year}-${month}-${day}T${timePart}`)
+      const date = this.parseDateString(dateString)
       if (isNaN(date)) return this.$t('map.invalidDate')
       const now = new Date()
       const diffMs = now - date
@@ -135,6 +132,7 @@ export default {
       if (diffHour < 24) return `${diffHour} ${this.$t('map.hoursAgo')}`
       return `${diffDay} ${this.$t('map.daysAgo')}`
     },
+
     initMap() {
       if (this.map) {
         this.map.remove()
@@ -214,6 +212,23 @@ export default {
       this.isLoading = false
     },
 
+    parseDateString(dateString) {
+      if (!dateString) return null
+      const [datePart, timePart] = dateString.trim().split(' ')
+      if (!datePart || !timePart) return null
+
+      const [day, month, year] = datePart.split('/')
+      if (!day || !month || !year) return null
+
+      let [hour, minute, second] = timePart.split(':')
+      hour = hour?.padStart(2, '0') || '00'
+      minute = minute?.padStart(2, '0') || '00'
+      second = second?.padStart(2, '0') || '00'
+
+      const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`)
+      return isNaN(date) ? null : date
+    },
+
     async fetchSheetData(fitBounds = true) {
       const res = await fetch(
         `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}/values/${this.range}?key=${this.apiKey}`,
@@ -226,17 +241,13 @@ export default {
 
       rows.forEach((row) => {
         const bienSoXe = row[1]
-        const [datePart, timePart] = row[0].split(' ')
-        const [day, month, year] = datePart.split('/')
-        const ngayNhap = new Date(`${year}-${month}-${day}T${timePart}`)
+        const ngayNhap = this.parseDateString(row[0])
         if (bienSoXe && !isNaN(ngayNhap)) {
           const current = latestByBienSo[bienSoXe]
           if (!current) {
             latestByBienSo[bienSoXe] = row
           } else {
-            const [curDatePart, curTimePart] = current[0].split(' ')
-            const [curDay, curMonth, curYear] = curDatePart.split('/')
-            const currentNgayNhap = new Date(`${curYear}-${curMonth}-${curDay}T${curTimePart}`)
+            const currentNgayNhap = this.parseDateString(current[0])
 
             if (ngayNhap > currentNgayNhap) {
               latestByBienSo[bienSoXe] = row
@@ -302,6 +313,7 @@ export default {
       this.showMarkers(fitBounds)
       this.loadAddressesAsync()
     },
+
     normalizeNumberString(str, isLng = false) {
       if (!str) return ''
 
@@ -322,6 +334,7 @@ export default {
 
       return num.toString()
     },
+
     async loadAddressesAsync() {
       for (const v of this.vehicleList) {
         try {
@@ -338,9 +351,11 @@ export default {
         await new Promise((resolve) => setTimeout(resolve, 1300))
       }
     },
+
     generatePopupContent(v) {
       return v.address
     },
+
     showMarkers(fitBounds) {
       this.markerCluster.clearLayers()
       this.circles.forEach((c) => this.map.removeLayer(c))
@@ -366,7 +381,7 @@ export default {
           color: isActive ? 'red' : 'green',
           fillColor: isActive ? 'tomato' : 'green',
           fillOpacity: 0.35,
-          radius: 200,
+          radius: 100,
           weight: 2,
         }).addTo(this.map)
         this.circles.push(circle)
@@ -374,7 +389,9 @@ export default {
         marker.bindPopup(this.generatePopupContent(v))
         marker.on('click', () => {
           this.selectedVehicle = v
-          this.map.flyTo([v.lat, v.lng], 15)
+          const currentZoom = this.map.getZoom()
+          const targetZoom = Math.max(currentZoom, 15)
+          this.map.flyTo([v.lat, v.lng], targetZoom)
           marker.openPopup()
         })
         marker.on('popupclose', () => {
@@ -401,6 +418,7 @@ export default {
         }, 300)
       }
     },
+
     async getAddressFromLatLng(lat, lng) {
       const key = `${lat.toFixed(6)},${lng.toFixed(6)}`
       if (this.addressCache[key]) {
@@ -417,10 +435,13 @@ export default {
 
     flyToMarker(item) {
       if (item.marker) {
-        this.map.flyTo([item.lat, item.lng], 15)
+        const currentZoom = this.map.getZoom()
+        const targetZoom = Math.max(currentZoom, 15)
+        this.map.flyTo([item.lat, item.lng], targetZoom)
         item.marker.openPopup()
       }
     },
+
     selectVehicle(item) {
       this.selectedVehicle = item
       this.flyToMarker(item)

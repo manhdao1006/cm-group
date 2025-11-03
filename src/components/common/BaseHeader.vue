@@ -144,7 +144,17 @@ export default {
   },
   mounted() {
     const savedUser = localStorage.getItem('googleUser')
-    if (savedUser) this.user = JSON.parse(savedUser)
+    if (savedUser) {
+      const user = JSON.parse(savedUser)
+      const now = new Date().getTime()
+
+      if (user.expiresAt && now < user.expiresAt) {
+        this.user = user
+      } else {
+        localStorage.removeItem('googleUser')
+        this.user = null
+      }
+    }
     this.loadGoogleScript()
     window.handleCredentialResponse = this.handleCredentialResponse
     this.toast = useToast()
@@ -208,6 +218,8 @@ export default {
     async handleCredentialResponse(response) {
       const credential = response.credential
       const payload = this.parseJwt(credential)
+      const now = new Date().getTime()
+      const EXPIRATION_MINUTES = 5
 
       this.user = {
         name: payload.name,
@@ -215,6 +227,7 @@ export default {
         picture: payload.picture,
         family_name: payload.family_name,
         given_name: payload.given_name,
+        expiresAt: now + EXPIRATION_MINUTES * 60 * 1000,
       }
 
       localStorage.setItem('googleUser', JSON.stringify(this.user))

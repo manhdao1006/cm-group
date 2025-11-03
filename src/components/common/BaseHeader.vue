@@ -219,7 +219,7 @@ export default {
       const credential = response.credential
       const payload = this.parseJwt(credential)
       const now = new Date().getTime()
-      const EXPIRATION_MINUTES = 5
+      const EXPIRATION_HOURS = 12
 
       this.user = {
         name: payload.name,
@@ -227,7 +227,7 @@ export default {
         picture: payload.picture,
         family_name: payload.family_name,
         given_name: payload.given_name,
-        expiresAt: now + EXPIRATION_MINUTES * 60 * 1000,
+        expiresAt: now + EXPIRATION_HOURS * 60 * 60 * 1000,
       }
 
       localStorage.setItem('googleUser', JSON.stringify(this.user))

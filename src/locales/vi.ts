@@ -16,7 +16,7 @@ export default {
   homePage: {
     welcome: 'Xin chào',
     content:
-      'Đây là hệ thống giám sát xe đưa đón học sinh giúp theo dõi vị trí xe theo thời gian thực, quản lý học sinh lên xuống và cảnh báo khi có sự cố, nhằm đảm bảo an toàn và hỗ trợ nhà trường quản lý hiệu quả. Do các sinh viên và T.S Nguyễn Phú Sinh nghiên cứu chế tạo.',
+      'Đây là hệ thống giám sát xe đưa đón sinh viên giúp theo dõi vị trí xe theo thời gian thực, quản lý sinh viên lên xuống và cảnh báo khi có sự cố, nhằm đảm bảo an toàn và hỗ trợ nhà trường quản lý hiệu quả. Do các sinh viên và T.S Nguyễn Phú Sinh nghiên cứu chế tạo.',
     valid: 'Vui lòng đăng nhập để tiếp tục.',
   },
   map: {

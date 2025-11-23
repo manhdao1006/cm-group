@@ -1,4 +1,18 @@
 export default {
+  auth: {
+    button: {
+      login: 'Login',
+      loginFacebook: 'Login with Facebook',
+    },
+    title: {
+      login: 'Login',
+      backToHome: 'Back to home page',
+    },
+    label: {
+      username: 'Account name',
+      password: 'Password',
+    },
+  },
   notification: {
     checkLogin: 'You need to log in to access!',
     successSave: 'Information saved successfully!',

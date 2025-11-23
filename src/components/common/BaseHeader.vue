@@ -8,7 +8,14 @@
 
       <div class="col-6 row text-end align-items-center">
         <template v-if="!user">
-          <div class="col-12 d-flex justify-content-end">
+          <div class="col-4 text-white d-flex justify-content-end align-items-center"></div>
+          <div class="col-4 text-white d-flex justify-content-end align-items-center"></div>
+          <div class="col-4 text-white d-flex justify-content-end align-items-center">
+            <a href="/dang-nhap" class="navbar-brand text-white d-flex align-items-center fs-6"
+              ><i class="fas fa-sign-in-alt"></i> <span class="ms-2">Đăng nhập</span></a
+            >
+          </div>
+          <!-- <div class="col-12 d-flex justify-content-end">
             <div
               id="g_id_onload"
               data-client_id="954414108201-06v6lu48msd5hu6jkfgc77sit28i3gvl.apps.googleusercontent.com"
@@ -27,7 +34,7 @@
               data-size="large"
               data-logo_alignment="left"
             ></div>
-          </div>
+          </div> -->
         </template>
 
         <template v-else>

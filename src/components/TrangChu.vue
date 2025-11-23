@@ -28,12 +28,16 @@ export default {
   mounted() {
     const savedUser = localStorage.getItem('googleUser')
     if (savedUser) this.user = JSON.parse(savedUser)
-    eventBus.on('userLoggedIn', (user) => {
+
+    this.userLoggedInHandler = (user) => {
       this.user = user
-    })
+    }
+    eventBus.on('userLoggedIn', this.userLoggedInHandler)
   },
   beforeUnmount() {
-    eventBus.off('userLoggedIn')
+    if (this.userLoggedInHandler) {
+      eventBus.off('userLoggedIn', this.userLoggedInHandler)
+    }
   },
 }
 </script>

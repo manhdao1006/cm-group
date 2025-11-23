@@ -1,4 +1,18 @@
 export default {
+  auth: {
+    button: {
+      login: 'Đăng nhập',
+      loginFacebook: 'Đăng nhập bằng Facebook',
+    },
+    title: {
+      login: 'Đăng nhập',
+      backToHome: 'Quay lại trang chủ',
+    },
+    label: {
+      username: 'Tên tài khoản',
+      password: 'Mật khẩu',
+    },
+  },
   notification: {
     checkLogin: 'Bạn cần đăng nhập để truy cập!',
     successSave: 'Lưu thông tin thành công!',

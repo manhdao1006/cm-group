@@ -1,3 +1,4 @@
+import Login from '@/components/common/Login.vue'
 import QuanLyNguoiDung from '@/components/QuanLyNguoiDung.vue'
 import TrangChu from '@/components/TrangChu.vue'
 import TruyXuatDuLieu from '@/components/TruyXuatDuLieu.vue'
@@ -28,6 +29,11 @@ const routes = [
     name: 'MapBus',
     component: MapBus,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/dang-nhap',
+    name: 'Login',
+    component: Login,
   },
   {
     path: '/',

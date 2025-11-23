@@ -12,7 +12,8 @@
           <div class="col-4 text-white d-flex justify-content-end align-items-center"></div>
           <div class="col-4 text-white d-flex justify-content-end align-items-center">
             <a href="/dang-nhap" class="navbar-brand text-white d-flex align-items-center fs-6"
-              ><i class="fas fa-sign-in-alt"></i> <span class="ms-2">Đăng nhập</span></a
+              ><i class="fas fa-sign-in-alt"></i>
+              <span class="ms-2">{{ $t('header.navigation.logout') }}</span></a
             >
           </div>
           <!-- <div class="col-12 d-flex justify-content-end">

@@ -22,6 +22,7 @@ export default {
   header: {
     navigation: {
       logout: 'Log out',
+      login: 'Log in',
       homePage: 'Home',
       mapBus: 'Map-Bus',
       data: 'Retrieve data',

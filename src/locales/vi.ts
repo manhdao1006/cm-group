@@ -22,6 +22,7 @@ export default {
   header: {
     navigation: {
       logout: 'Đăng xuất',
+      login: 'Đăng nhập',
       homePage: 'Trang chủ',
       mapBus: 'Map-Bus',
       data: 'Truy xuất dữ liệu',

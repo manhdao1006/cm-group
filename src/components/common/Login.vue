@@ -5,26 +5,23 @@
     role="main"
     aria-label="Trang chủ GOS Dream League Soccer"
   >
-    <div class="hero-section p-0 bg-white">
+    <div class="hero-section p-0">
       <div class="container pt-3 pb-3">
         <LanguageSwitcher class="position-absolute top-0 start-0 m-3" />
 
         <div class="row">
-          <div class="col-12 align-items-center text-center">
+          <div class="col-12 align-items-center text-center mb-3">
             <div class="">
               <a href="/" rel="noopener noreferrer" title="CM-GROUP">
                 <img
                   height="100px"
                   width="100px"
-                  src="https://res.cloudinary.com/springboot-cloud/image/upload/v1760100751/logo_ychkz3.png"
+                  src="https://res.cloudinary.com/springboot-cloud/image/upload/v1763911080/logo_ychkz3.png"
                   alt="CM-GROUP"
                   title="CM-GROUP"
                 />
               </a>
             </div>
-          </div>
-          <div class="col-12">
-            <div class="mb-3"></div>
           </div>
         </div>
 
@@ -138,7 +135,7 @@
 
                 <!-- LOGO -->
                 <div
-                  class="col-12 col-lg-5 align-items-center justify-content-center text-center isHiddenMobile"
+                  class="col-12 mt-5 col-lg-5 align-items-center justify-content-center text-center isHiddenMobile"
                 >
                   <div class="main-logo">
                     <img
@@ -302,6 +299,7 @@ export default defineComponent({
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  background-image: url('https://res.cloudinary.com/springboot-cloud/image/upload/v1763912368/b9f1267f81ac399b539c96f68c63cade_j88bld.png');
   min-height: 100vh;
   color: white;
   display: flex;

@@ -7,6 +7,7 @@ export default {
     title: {
       login: 'Đăng nhập',
       backToHome: 'Quay lại trang chủ',
+      qr: 'Hoặc quét mã QR để đăng nhập',
     },
     label: {
       username: 'Tên tài khoản',

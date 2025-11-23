@@ -138,16 +138,17 @@
 
                 <!-- LOGO -->
                 <div
-                  class="col-12 col-lg-5 d-flex align-items-center justify-content-center isHiddenMobile"
+                  class="col-12 col-lg-5 align-items-center justify-content-center text-center isHiddenMobile"
                 >
                   <div class="main-logo">
                     <img
-                      height="250"
-                      width="250"
-                      src="https://res.cloudinary.com/springboot-cloud/image/upload/v1753505199/logo-group_jz2ezw.jpg"
-                      alt="GOS"
+                      height="250px"
+                      width="250px"
+                      src="https://res.cloudinary.com/springboot-cloud/image/upload/v1763908444/qrcode_279828851_ac41ee4f397cf8832a1596917f5d47f4_loy2t3.png"
+                      alt="CM"
                     />
                   </div>
+                  <div class="mt-3">{{ $t('auth.title.qr') }}</div>
                 </div>
               </div>
             </div>
@@ -311,7 +312,6 @@ export default defineComponent({
   padding: 4rem 0;
 }
 .main-logo img {
-  border-radius: 50%;
   object-fit: cover;
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.2),
@@ -343,7 +343,6 @@ export default defineComponent({
 }
 
 .main-logo img {
-  border-radius: 50%;
   object-fit: cover;
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.25),

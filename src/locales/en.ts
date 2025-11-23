@@ -7,6 +7,7 @@ export default {
     title: {
       login: 'Login',
       backToHome: 'Back to home page',
+      qr: 'Or scan QR code to log in',
     },
     label: {
       username: 'Account name',

@@ -2,7 +2,9 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-banner w-100">
     <div class="container-fluid row fw-bolder" style="font-size: 12px">
       <div class="col-6 row">
-        <div class="col-6"><LanguageSwitcher /></div>
+        <div class="col-6">
+          <LanguageSwitcher class="position-absolute top-0 start-0 mt-1 ms-2" />
+        </div>
         <div class="col-6"></div>
       </div>
 

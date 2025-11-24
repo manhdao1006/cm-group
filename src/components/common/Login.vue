@@ -298,7 +298,7 @@ export default defineComponent({
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('https://res.cloudinary.com/springboot-cloud/image/upload/v1763946205/b9f1267f81ac399b539c96f68c63cade_j88bld.jpg');
+  background-image: url('https://res.cloudinary.com/springboot-cloud/image/upload/v1763946943/b9f1267f81ac399b539c96f68c63cade_j88bld.jpg');
   min-height: 100vh;
   color: white;
   display: flex;

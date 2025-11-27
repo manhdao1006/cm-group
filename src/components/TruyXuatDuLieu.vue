@@ -2,111 +2,123 @@
   <div>
     <BaseHeader />
 
-    <div class="container-fluid px-0 mt-3 mb-3">
-      <div class="border border-dark-subtle border-2 rounded-3 p-3 bg-white shadow-sm">
-        <!-- Bộ lọc tìm kiếm -->
-        <div class="row g-2 mb-3">
-          <div class="col-md-4">
-            <input
-              v-model="searchText"
-              type="text"
-              class="form-control"
-              :placeholder="$t('data.button.search')"
-            />
-          </div>
-          <div class="col-md-3">
-            <select v-model="filterStatus" class="form-select">
-              <option value="">{{ $t('data.button.filter.all') }}</option>
-              <option value="1">{{ $t('data.button.filter.active') }}</option>
-              <option value="0">{{ $t('data.button.filter.inactive') }}</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <button class="btn btn-primary w-100" @click="fetchSheetData">
-              <i class="fas fa-sync-alt"></i> {{ $t('data.button.reload') }}
-            </button>
-          </div>
-          <div class="col-md-3 text-end">
-            <button class="btn btn-success w-100" @click="exportToExcel">
-              <i class="fas fa-file-excel"></i> {{ $t('data.button.exportExcel') }}
-            </button>
-          </div>
+    <div class="container-fluid px-0">
+      <div class="d-flex h-100">
+        <div :style="{ width: collapsed ? '60px' : '220px', transition: 'width 0.3s' }">
+          <SidebarMenu :user="user" style="height: 100%" @updateCollapsed="collapsed = $event" />
         </div>
+        <div class="flex-grow-1 ms-3 mt-3 me-3" style="width: 100%; height: 100%">
+          <div class="border border-dark-subtle border-2 rounded-3 p-3 bg-white shadow-sm">
+            <!-- Bộ lọc tìm kiếm -->
+            <div class="row g-2 mb-3">
+              <div class="col-md-4">
+                <input
+                  v-model="searchText"
+                  type="text"
+                  class="form-control"
+                  :placeholder="$t('data.button.search')"
+                />
+              </div>
+              <div class="col-md-3">
+                <select v-model="filterStatus" class="form-select">
+                  <option value="">{{ $t('data.button.filter.all') }}</option>
+                  <option value="1">{{ $t('data.button.filter.active') }}</option>
+                  <option value="0">{{ $t('data.button.filter.inactive') }}</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-primary w-100" @click="fetchSheetData">
+                  <i class="fas fa-sync-alt"></i> {{ $t('data.button.reload') }}
+                </button>
+              </div>
+              <div class="col-md-3 text-end">
+                <button class="btn btn-success w-100" @click="exportToExcel">
+                  <i class="fas fa-file-excel"></i> {{ $t('data.button.exportExcel') }}
+                </button>
+              </div>
+            </div>
 
-        <!-- Bảng dữ liệu -->
-        <div class="table-responsive" style="max-height: 550px; overflow-y: auto">
-          <table class="table table-striped table-bordered align-middle text-center">
-            <thead class="table-light">
-              <tr>
-                <th>{{ $t('data.table.no') }}</th>
-                <th>{{ $t('data.table.licenseNumber') }}</th>
-                <th>{{ $t('data.table.carName') }}</th>
-                <th>{{ $t('data.table.temperature') }}</th>
-                <th>{{ $t('data.table.driverName') }}</th>
-                <th>{{ $t('data.table.phoneNumber') }}</th>
-                <th>{{ $t('data.table.address') }}</th>
-                <th>{{ $t('data.table.status') }}</th>
-                <th>{{ $t('data.table.createDate') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(v, index) in filteredVehicleList" :key="v.bienSoXe">
-                <td>{{ index + 1 }}</td>
-                <td>{{ v.bienSoXe }}</td>
-                <td>{{ v.tenXe }}</td>
-                <td>{{ v.nhietDo }}</td>
-                <td>{{ v.tenTaiXe }}</td>
-                <td>{{ v.soDienThoai }}</td>
-                <td>{{ v.address }}</td>
-                <td>
-                  <span class="badge" :class="v.trangThai === '1' ? 'bg-success' : 'bg-secondary'">
-                    {{ v.trangThai === '1' ? $t('data.table.active') : $t('data.table.inactive') }}
-                  </span>
-                </td>
-                <td>{{ v.ngayNhap }}</td>
-              </tr>
-            </tbody>
-          </table>
+            <!-- Bảng dữ liệu -->
+            <div class="table-responsive" style="max-height: 550px; overflow-y: auto">
+              <table class="table table-striped table-bordered align-middle text-center">
+                <thead class="table-light">
+                  <tr>
+                    <th>{{ $t('data.table.no') }}</th>
+                    <th>{{ $t('data.table.licenseNumber') }}</th>
+                    <th>{{ $t('data.table.carName') }}</th>
+                    <th>{{ $t('data.table.temperature') }}</th>
+                    <th>{{ $t('data.table.driverName') }}</th>
+                    <th>{{ $t('data.table.phoneNumber') }}</th>
+                    <th>{{ $t('data.table.address') }}</th>
+                    <th>{{ $t('data.table.status') }}</th>
+                    <th>{{ $t('data.table.createDate') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(v, index) in filteredVehicleList" :key="v.bienSoXe">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ v.bienSoXe }}</td>
+                    <td>{{ v.tenXe }}</td>
+                    <td>{{ v.nhietDo }}</td>
+                    <td>{{ v.tenTaiXe }}</td>
+                    <td>{{ v.soDienThoai }}</td>
+                    <td>{{ v.address }}</td>
+                    <td>
+                      <span
+                        class="badge"
+                        :class="v.trangThai === '1' ? 'bg-success' : 'bg-secondary'"
+                      >
+                        {{
+                          v.trangThai === '1' ? $t('data.table.active') : $t('data.table.inactive')
+                        }}
+                      </span>
+                    </td>
+                    <td>{{ v.ngayNhap }}</td>
+                  </tr>
+                </tbody>
+              </table>
 
-          <div v-if="filteredVehicleList.length === 0" class="text-center py-3 text-muted">
-            {{ $t('data.table.noData') }}
+              <div v-if="filteredVehicleList.length === 0" class="text-center py-3 text-muted">
+                {{ $t('data.table.noData') }}
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div>
+                {{ $t('data.pagination.display') }}
+                <select v-model.number="itemsPerPage" class="form-select d-inline w-auto mx-2">
+                  <option :value="5">5</option>
+                  <option :value="10">10</option>
+                  <option :value="20">20</option>
+                </select>
+                {{ $t('data.pagination.rowPerPage') }}
+              </div>
+
+              <nav>
+                <ul class="pagination mb-0">
+                  <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                    <button class="page-link" @click="prevPage">
+                      {{ $t('data.button.firstPage') }}
+                    </button>
+                  </li>
+                  <li
+                    v-for="page in totalPages"
+                    :key="page"
+                    class="page-item"
+                    :class="{ active: currentPage === page }"
+                  >
+                    <button class="page-link" @click="goToPage(page)">
+                      {{ page }}
+                    </button>
+                  </li>
+                  <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                    <button class="page-link" @click="nextPage">
+                      {{ $t('data.button.lastPage') }}
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
-        </div>
-        <div class="d-flex justify-content-between align-items-center mt-3">
-          <div>
-            {{ $t('data.pagination.display') }}
-            <select v-model.number="itemsPerPage" class="form-select d-inline w-auto mx-2">
-              <option :value="5">5</option>
-              <option :value="10">10</option>
-              <option :value="20">20</option>
-            </select>
-            {{ $t('data.pagination.rowPerPage') }}
-          </div>
-
-          <nav>
-            <ul class="pagination mb-0">
-              <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <button class="page-link" @click="prevPage">
-                  {{ $t('data.button.firstPage') }}
-                </button>
-              </li>
-              <li
-                v-for="page in totalPages"
-                :key="page"
-                class="page-item"
-                :class="{ active: currentPage === page }"
-              >
-                <button class="page-link" @click="goToPage(page)">
-                  {{ page }}
-                </button>
-              </li>
-              <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                <button class="page-link" @click="nextPage">
-                  {{ $t('data.button.lastPage') }}
-                </button>
-              </li>
-            </ul>
-          </nav>
         </div>
       </div>
     </div>
@@ -116,10 +128,11 @@
 <script>
 import * as XLSX from 'xlsx'
 import BaseHeader from './common/BaseHeader.vue'
+import SidebarMenu from './common/SidebarMenu.vue'
 
 export default {
   name: 'TruyXuatDuLieu',
-  components: { BaseHeader },
+  components: { BaseHeader, SidebarMenu },
 
   data() {
     return {
@@ -131,6 +144,8 @@ export default {
       range: 'A:J',
       currentPage: 1,
       itemsPerPage: 10,
+      user: JSON.parse(localStorage.getItem('googleUser') || 'null'),
+      collapsed: false,
     }
   },
 

@@ -27,6 +27,7 @@ export default {
       mapBus: 'Map-Bus',
       data: 'Retrieve data',
       account: 'Manage users',
+      system: 'System',
     },
   },
   homePage: {

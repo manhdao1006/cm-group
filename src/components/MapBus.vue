@@ -1,19 +1,30 @@
 <template>
   <div>
-    <BaseHeader />
+    <BaseHeader :user="user" />
 
-    <div class="container-lg px-0 mt-3 mb-3" style="height: 600px">
-      <div class="row h-100 g-0 border border-dark-subtle border-2 rounded-3">
-        <div class="col-3 overflow-auto h-100 border-dark-subtle border-2 border-end">
+    <div class="container-fluid px-0" style="height: 600px">
+      <div class="d-flex h-100">
+        <div :style="{ width: collapsed ? '60px' : '180px', transition: 'width 0.3s' }">
+          <SidebarMenu :user="user" style="height: 100%" @updateCollapsed="collapsed = $event" />
+        </div>
+        <div
+          class="overflow-auto h-100 border-dark-subtle border-2 border-end border-start"
+          :style="{
+            width: collapsed ? '240px' : '240px',
+            transition: 'width 0.3s',
+            height: '100%',
+          }"
+        >
           <input
             type="text"
             class="form-control mb-2"
             :placeholder="$t('map.search')"
             v-model="searchText"
+            style="font-size: 12px"
           />
           <ul
             class="list-group list-group-flush flex-grow-1 overflow-auto"
-            style="max-height: 520px"
+            style="max-height: calc(100% - 38px)"
           >
             <li
               v-for="item in filteredVehicleList"
@@ -51,8 +62,8 @@
           </ul>
         </div>
 
-        <div class="col-9 h-100">
-          <div id="map" class="w-100 h-100"></div>
+        <div class="flex-grow-1" style="height: 100%">
+          <div id="map" style="width: 100%; height: 100%"></div>
         </div>
       </div>
     </div>
@@ -71,11 +82,13 @@ import 'leaflet.markercluster'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet/dist/leaflet.css'
 import BaseHeader from './common/BaseHeader.vue'
+import SidebarMenu from './common/SidebarMenu.vue'
 
 export default {
   name: 'MapView',
   components: {
     BaseHeader,
+    SidebarMenu,
   },
   data() {
     return {
@@ -96,6 +109,8 @@ export default {
       isLoading: true,
       prevMarkerCount: 0,
       addressCache: {},
+      user: JSON.parse(localStorage.getItem('googleUser') || 'null'),
+      collapsed: false,
     }
   },
   computed: {

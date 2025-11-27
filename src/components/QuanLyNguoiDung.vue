@@ -1,103 +1,114 @@
 <template>
   <BaseHeader />
-  <div class="container mx-auto p-4 max-w-md">
-    <form @submit.prevent="submitForm">
-      <div class="row g-4">
-        <div class="col-12 col-md-3 text-center">
-          <div
-            class="border rounded overflow-hidden mb-2 mx-auto"
-            style="width: 150px; height: 150px"
-          >
-            <img
-              src="https://res.cloudinary.com/springboot-cloud/image/upload/v1760115196/user_vcqlq3.webp"
-              alt="Avatar"
-              class="img-fluid w-100 h-100"
-              loading="lazy"
-            />
-          </div>
+  <div class="container-fluid px-0">
+    <div class="d-flex h-100">
+      <div :style="{ width: collapsed ? '60px' : '220px', transition: 'width 0.3s' }">
+        <SidebarMenu :user="user" style="height: 100%" @updateCollapsed="collapsed = $event" />
+      </div>
+      <div class="flex-grow-1 mt-3 me-3" style="width: 100%; height: 100%">
+        <div style="width: 100%; height: 100%">
+          <form @submit.prevent="submitForm">
+            <div class="row g-4">
+              <div class="col-12 col-md-3 text-center">
+                <div
+                  class="border rounded overflow-hidden mb-2 mx-auto"
+                  style="width: 150px; height: 150px"
+                >
+                  <img
+                    src="https://res.cloudinary.com/springboot-cloud/image/upload/v1760115196/user_vcqlq3.webp"
+                    alt="Avatar"
+                    class="img-fluid w-100 h-100"
+                    loading="lazy"
+                  />
+                </div>
 
-          <div class="mb-3 row g-2 align-items-center visually-hidden">
-            <label class="col-auto col-form-label me-1 pe-1"
-              >{{ $t('user.label.imageLink') }}:</label
-            >
-            <div class="col">
-              <input v-model="form.linkAnh" type="text" class="form-control" />
-            </div>
-          </div>
-        </div>
+                <div class="mb-3 row g-2 align-items-center visually-hidden">
+                  <label class="col-auto col-form-label me-1 pe-1"
+                    >{{ $t('user.label.imageLink') }}:</label
+                  >
+                  <div class="col">
+                    <input v-model="form.linkAnh" type="text" class="form-control" />
+                  </div>
+                </div>
+              </div>
 
-        <div class="col-12 col-md-9">
-          <div class="mb-3 row g-2 align-items-center">
-            <div class="col-3">
-              <label class="col-auto col-form-label">{{ $t('user.label.surname') }}:</label>
-            </div>
-            <div class="col-6">
-              <input v-model="form.ho" type="text" class="form-control" />
-            </div>
-          </div>
+              <div class="col-12 col-md-9">
+                <div class="mb-3 row g-2 align-items-center">
+                  <div class="col-3">
+                    <label class="col-auto col-form-label">{{ $t('user.label.surname') }}:</label>
+                  </div>
+                  <div class="col-6">
+                    <input v-model="form.ho" type="text" class="form-control" />
+                  </div>
+                </div>
 
-          <div class="mb-3 row g-2 align-items-center">
-            <div class="col-3">
-              <label class="col-auto col-form-label">{{ $t('user.label.name') }}:</label>
-            </div>
-            <div class="col-6">
-              <input v-model="form.ten" type="text" class="form-control" />
-            </div>
-          </div>
+                <div class="mb-3 row g-2 align-items-center">
+                  <div class="col-3">
+                    <label class="col-auto col-form-label">{{ $t('user.label.name') }}:</label>
+                  </div>
+                  <div class="col-6">
+                    <input v-model="form.ten" type="text" class="form-control" />
+                  </div>
+                </div>
 
-          <div class="mb-3 row g-2 align-items-center">
-            <div class="col-3">
-              <label class="col-auto col-form-label">{{ $t('user.label.fullname') }}:</label>
-            </div>
-            <div class="col-6">
-              <input v-model="form.hoVaTen" type="text" class="form-control" />
-            </div>
-          </div>
+                <div class="mb-3 row g-2 align-items-center">
+                  <div class="col-3">
+                    <label class="col-auto col-form-label">{{ $t('user.label.fullname') }}:</label>
+                  </div>
+                  <div class="col-6">
+                    <input v-model="form.hoVaTen" type="text" class="form-control" />
+                  </div>
+                </div>
 
-          <div class="mb-3 row g-2 align-items-center">
-            <div class="col-3">
-              <label class="col-auto col-form-label">{{ $t('user.label.dob') }}:</label>
-            </div>
-            <div class="col-6">
-              <input v-model="form.ngaySinh" type="date" class="form-control" />
-            </div>
-          </div>
+                <div class="mb-3 row g-2 align-items-center">
+                  <div class="col-3">
+                    <label class="col-auto col-form-label">{{ $t('user.label.dob') }}:</label>
+                  </div>
+                  <div class="col-6">
+                    <input v-model="form.ngaySinh" type="date" class="form-control" />
+                  </div>
+                </div>
 
-          <div class="mb-3 row g-2 align-items-center">
-            <div class="col-3">
-              <label class="col-auto col-form-label">{{ $t('user.label.phoneNumber') }}:</label>
-            </div>
-            <div class="col-6">
-              <input v-model="form.soDienThoai" type="tel" class="form-control" />
-            </div>
-          </div>
+                <div class="mb-3 row g-2 align-items-center">
+                  <div class="col-3">
+                    <label class="col-auto col-form-label"
+                      >{{ $t('user.label.phoneNumber') }}:</label
+                    >
+                  </div>
+                  <div class="col-6">
+                    <input v-model="form.soDienThoai" type="tel" class="form-control" />
+                  </div>
+                </div>
 
-          <div class="mb-3 row g-2 align-items-center">
-            <div class="col-3">
-              <label class="col-auto col-form-label">{{ $t('user.label.email') }}:</label>
-            </div>
-            <div class="col-6">
-              <input v-model="form.email" type="email" class="form-control" />
-            </div>
-          </div>
+                <div class="mb-3 row g-2 align-items-center">
+                  <div class="col-3">
+                    <label class="col-auto col-form-label">{{ $t('user.label.email') }}:</label>
+                  </div>
+                  <div class="col-6">
+                    <input v-model="form.email" type="email" class="form-control" />
+                  </div>
+                </div>
 
-          <div class="mb-3 row g-2 align-items-center">
-            <div class="col-3">
-              <label class="col-auto col-form-label">{{ $t('user.label.address') }}:</label>
+                <div class="mb-3 row g-2 align-items-center">
+                  <div class="col-3">
+                    <label class="col-auto col-form-label">{{ $t('user.label.address') }}:</label>
+                  </div>
+                  <div class="col-6">
+                    <input v-model="form.diaChi" type="text" class="form-control" />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="col-6">
-              <input v-model="form.diaChi" type="text" class="form-control" />
+
+            <div class="mt-3 text-center">
+              <button type="submit" class="btn btn-primary" :disabled="loading">
+                {{ $t('user.button.save') }}
+              </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
-
-      <div class="mt-3 text-center">
-        <button type="submit" class="btn btn-primary" :disabled="loading">
-          {{ $t('user.button.save') }}
-        </button>
-      </div>
-    </form>
+    </div>
 
     <div v-if="loading" class="loading-overlay">
       <div class="spinner"></div>
@@ -108,9 +119,10 @@
 <script>
 import { useToast } from 'vue-toastification'
 import BaseHeader from './common/BaseHeader.vue'
+import SidebarMenu from './common/SidebarMenu.vue'
 
 export default {
-  components: { BaseHeader },
+  components: { BaseHeader, SidebarMenu },
   data() {
     return {
       form: {
@@ -128,6 +140,8 @@ export default {
       success: false,
       toast: null,
       loading: false,
+      user: JSON.parse(localStorage.getItem('googleUser') || 'null'),
+      collapsed: false,
     }
   },
   mounted() {

@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-banner w-100">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-banner w-100" style="height: 50px">
     <div class="container-fluid row fw-bolder" style="font-size: 12px">
       <div class="col-6 row">
         <div class="col-6">
@@ -56,7 +56,7 @@
     </div>
   </nav>
 
-  <nav class="navbar navbar-expand-lg navbar-dark w-100">
+  <!-- <nav class="navbar navbar-expand-lg navbar-dark w-100">
     <div class="container">
       <router-link class="navbar-brand fw-bold text-black d-flex align-items-center" to="/">
         <img
@@ -67,9 +67,9 @@
         />
       </router-link>
     </div>
-  </nav>
+  </nav> -->
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-banner w-100">
+  <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-banner w-100">
     <div class="container-fluid">
       <button
         class="navbar-toggler"
@@ -108,7 +108,7 @@
         </ul>
       </div>
     </div>
-  </nav>
+  </nav> -->
 
   <nav
     class="navbar navbar-expand-lg navbar-dark bg-dark-subtle w-100"

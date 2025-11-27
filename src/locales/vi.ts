@@ -27,6 +27,7 @@ export default {
       mapBus: 'Map-Bus',
       data: 'Truy xuất dữ liệu',
       account: 'Quản lý người dùng',
+      system: 'Hệ thống',
     },
   },
   homePage: {

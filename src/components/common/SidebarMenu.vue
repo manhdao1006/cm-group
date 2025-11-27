@@ -41,7 +41,7 @@ export default {
       this.$emit('updateCollapsed', this.collapsed)
     },
     checkLogin(path) {
-      const protectedRoutes = ['/map-bus', '/quan-ly-nguoi-dung']
+      const protectedRoutes = ['/map-bus', 'du-lieu', '/quan-ly-nguoi-dung']
       if (!this.user && protectedRoutes.includes(path)) {
         this.toast.error(this.$t('notification.checkLogin'))
         return

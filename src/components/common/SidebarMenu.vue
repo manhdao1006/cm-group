@@ -5,7 +5,7 @@
       <span v-if="!collapsed">{{ $t('header.navigation.system') }}</span>
     </button>
 
-    <ul class="navbar-nav text-capitalize mt-3" v-if="!collapsed">
+    <ul class="navbar-nav text-capitalize mt-3 fw-medium" v-if="!collapsed">
       <li class="nav-item" v-for="item in menuItems" :key="item.to">
         <router-link class="nav-link" :to="item.to" @click.prevent="checkLogin(item.to)">
           {{ $t(item.label) }}
@@ -75,7 +75,7 @@ export default {
   color: #fff;
   padding: 10px;
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   border-radius: 6px;
 }
 

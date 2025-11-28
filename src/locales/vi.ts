@@ -84,6 +84,7 @@ export default {
       exportExcel: 'Xuất Excel',
       firstPage: 'Trước',
       lastPage: 'Sau',
+      viewByDay: 'Xem theo ngày',
     },
     pagination: {
       display: 'Hiển thị',

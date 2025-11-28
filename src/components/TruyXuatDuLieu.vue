@@ -8,12 +8,12 @@
           <SidebarMenu :user="user" style="height: 100%" @updateCollapsed="collapsed = $event" />
         </div>
         <div class="flex-grow-1 ms-3 mt-3 me-3" style="width: 100%; height: 100%">
-          <div class="row col-12 border-bottom border-black border-1 pb-3">
+          <div class="row col-12 border-bottom border-dark-subtle border-1 pb-3">
             <BarChart :vehicleList="vehicleList" />
           </div>
 
           <div class="row mt-3 mb-3">
-            <div class="col-8 border-end border-black border-1">
+            <div class="col-8 border-end border-dark-subtle border-1">
               <LineChart :vehicleList="vehicleList" />
             </div>
             <div class="col-4"><PieChart :vehicleList="vehicleList" /></div>

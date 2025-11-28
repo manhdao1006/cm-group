@@ -84,6 +84,7 @@ export default {
       exportExcel: 'Export Excel',
       firstPage: 'Previous',
       lastPage: 'Next',
+      viewByDay: 'View by day',
     },
     pagination: {
       display: 'Display',

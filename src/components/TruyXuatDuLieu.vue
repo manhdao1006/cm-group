@@ -55,7 +55,7 @@
                   <tr>
                     <th>{{ $t('data.table.no') }}</th>
                     <th>{{ $t('data.table.licenseNumber') }}</th>
-                    <th>{{ $t('data.table.carName') }}</th>
+                    <!-- <th>{{ $t('data.table.carName') }}</th> -->
                     <th>{{ $t('data.table.temperature') }}</th>
                     <th>{{ $t('data.table.driverName') }}</th>
                     <th>{{ $t('data.table.phoneNumber') }}</th>
@@ -71,7 +71,7 @@
                   <tr v-for="(v, index) in filteredVehicleList" :key="v.bienSoXe">
                     <td>{{ index + 1 }}</td>
                     <td>{{ v.bienSoXe }}</td>
-                    <td>{{ v.tenXe }}</td>
+                    <!-- <td>{{ v.tenXe }}</td> -->
                     <td>{{ v.nhietDo }}</td>
                     <td>{{ v.tenTaiXe }}</td>
                     <td>{{ v.soDienThoai }}</td>
@@ -257,6 +257,14 @@ export default {
       v._isEditing = false
     },
     async saveRow(v) {
+      if (v._editDon < v._editTra) {
+        this.toast.error('Số lượng trả không được lớn hơn số lượng đón')
+        return
+      }
+      if (v._editTra < v._editDon) {
+        this.toast.error('Số lượng đón không được lớn hơn số lượng trả')
+        return
+      }
       this.loading = true
 
       try {

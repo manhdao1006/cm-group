@@ -1,6 +1,11 @@
 <template>
   <div>
-    <LineChart v-if="chartData.datasets[0].data.length" :data="chartData" :options="chartOptions" />
+    <LineChart
+      :key="$i18n.locale"
+      v-if="chartData.datasets[0].data.length"
+      :data="chartData"
+      :options="chartOptions"
+    />
   </div>
 </template>
 
@@ -19,6 +24,7 @@ import {
 import 'chartjs-adapter-date-fns'
 import { ref, watch } from 'vue'
 import { Line as LineChart } from 'vue-chartjs'
+import { useI18n } from 'vue-i18n'
 
 ChartJS.register(
   Title,
@@ -34,11 +40,12 @@ ChartJS.register(
 const props = defineProps({
   vehicleList: { type: Array, default: () => [] },
 })
+const { t } = useI18n()
 
 const chartData = ref({
   datasets: [
     {
-      label: 'Nhiệt độ',
+      label: t('data.chart.unit.temperature'),
       data: [],
       borderColor: 'red',
       backgroundColor: 'orange',
@@ -48,11 +55,11 @@ const chartData = ref({
   ],
 })
 
-const chartOptions = {
+const chartOptions = ref({
   responsive: true,
   plugins: {
     legend: { position: 'top' },
-    title: { display: true, text: 'Biểu đồ nhiệt độ theo thời gian' },
+    title: { display: true, text: t('data.chart.title.line') },
   },
   scales: {
     x: {
@@ -64,29 +71,36 @@ const chartOptions = {
       },
       title: {
         display: true,
-        text: 'Thời gian',
-        font: {
-          weight: 'bold',
-          size: 16,
-        },
+        text: t('data.chart.label.time'),
+        font: { weight: 'bold', size: 16 },
       },
-      min: new Date('2025-11-28T08:00:00'),
-      max: new Date('2025-11-28T18:00:00'),
     },
     y: {
       title: {
         display: true,
-        text: 'Nhiệt độ (°C)',
-        font: {
-          weight: 'bold',
-          size: 16,
-        },
+        text: t('data.chart.label.temperature'),
+        font: { weight: 'bold', size: 16 },
       },
       suggestedMin: 20,
       suggestedMax: 40,
     },
   },
-}
+})
+
+watch(
+  () => [
+    t('data.chart.unit.temperature'),
+    t('data.chart.title.line'),
+    t('data.chart.label.time'),
+    t('data.chart.label.temperature'),
+  ],
+  () => {
+    chartData.value.datasets[0].label = t('data.chart.unit.temperature')
+    chartOptions.value.plugins.title.text = t('data.chart.title.line')
+    chartOptions.value.scales.x.title.text = t('data.chart.label.time')
+    chartOptions.value.scales.y.title.text = t('data.chart.label.temperature')
+  },
+)
 
 watch(
   () => props.vehicleList,
@@ -103,12 +117,12 @@ watch(
     const times = data.map((d) => d.x.getTime())
     const minTime = Math.min(...times) - 30 * 60 * 1000
     const maxTime = Math.max(...times) + 30 * 60 * 1000
-    chartOptions.scales.x.min = new Date(minTime)
-    chartOptions.scales.x.max = new Date(maxTime)
+    chartOptions.value.scales.x.min = new Date(minTime)
+    chartOptions.value.scales.x.max = new Date(maxTime)
 
     const temps = data.map((d) => d.y)
-    chartOptions.scales.y.suggestedMin = Math.min(...temps) - 1
-    chartOptions.scales.y.suggestedMax = Math.max(...temps) + 1
+    chartOptions.value.scales.y.suggestedMin = Math.min(...temps) - 1
+    chartOptions.value.scales.y.suggestedMax = Math.max(...temps) + 1
   },
   { immediate: true },
 )

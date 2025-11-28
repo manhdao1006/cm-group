@@ -1,6 +1,11 @@
 <template>
   <div style="height: 500px; margin: 0 auto">
-    <BarChart v-if="chartData.datasets[0].data.length" :data="chartData" :options="chartOptions" />
+    <BarChart
+      :key="$i18n.locale"
+      v-if="chartData.datasets[0].data.length"
+      :data="chartData"
+      :options="chartOptions"
+    />
   </div>
 </template>
 
@@ -14,10 +19,12 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Bar as BarChart } from 'vue-chartjs'
+import { useI18n } from 'vue-i18n'
 
 ChartJS.register(Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
+const { t } = useI18n()
 
 const props = defineProps({
   vehicleList: { type: Array, default: () => [] },
@@ -27,48 +34,42 @@ const chartData = ref({
   labels: [],
   datasets: [
     {
-      label: 'Số lượng đón',
+      label: t('data.chart.unit.soLuongDon'),
       data: [],
       backgroundColor: '#42A5F5',
     },
     {
-      label: 'Số lượng trả',
+      label: t('data.chart.unit.soLuongTra'),
       data: [],
       backgroundColor: '#66BB6A',
     },
   ],
 })
 
-const chartOptions = {
+const chartOptions = computed(() => ({
   responsive: true,
   plugins: {
     legend: { position: 'top' },
-    title: { display: true, text: 'Biểu đồ số lượng đón và trả sinh viên theo xe' },
+    title: { display: true, text: t('data.chart.title.bar') },
   },
   scales: {
     x: {
       title: {
         display: true,
-        text: 'BIỂN SỐ XE',
-        font: {
-          weight: 'bold',
-          size: 16,
-        },
+        text: t('data.chart.label.licenseNumber'),
+        font: { weight: 'bold', size: 16 },
       },
     },
     y: {
       title: {
         display: true,
-        text: 'SỐ LƯỢNG',
-        font: {
-          weight: 'bold',
-          size: 16,
-        },
+        text: t('data.chart.label.quantity'),
+        font: { weight: 'bold', size: 16 },
       },
       beginAtZero: true,
     },
   },
-}
+}))
 
 watch(
   () => props.vehicleList,
@@ -81,5 +82,18 @@ watch(
     chartData.value.datasets[1].data = list.map((v) => parseInt(v.soLuongTra) || 0)
   },
   { immediate: true },
+)
+
+watch(
+  () => t('data.chart.unit.soLuongDon'),
+  (newVal) => {
+    chartData.value.datasets[0].label = newVal
+  },
+)
+watch(
+  () => t('data.chart.unit.soLuongTra'),
+  (newVal) => {
+    chartData.value.datasets[1].label = newVal
+  },
 )
 </script>

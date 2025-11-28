@@ -88,6 +88,29 @@ export default {
       display: 'Display',
       rowPerPage: 'rows per page',
     },
+    chart: {
+      title: {
+        bar: 'Chart of number of students picked up and dropped off by vehicle',
+        line: 'Chart of temperature over time',
+        pie: 'Chart of number of vehicles by status',
+      },
+      label: {
+        quantity: 'QUANTITY',
+        licenseNumber: 'LICENSE NUMBER',
+        temperature: 'Temperature (°C)',
+        time: 'Time',
+      },
+      unit: {
+        soLuongDon: 'Number of pick-ups',
+        soLuongTra: 'Number of returns',
+        temperature: 'Temperature',
+        active: 'Active',
+        inActive: 'Inactive',
+      },
+      hover: {
+        soLuongXe: 'Number of cars',
+      },
+    },
   },
   user: {
     label: {

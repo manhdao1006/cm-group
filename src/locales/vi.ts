@@ -88,6 +88,29 @@ export default {
       display: 'Hiển thị',
       rowPerPage: 'hàng mỗi trang',
     },
+    chart: {
+      title: {
+        bar: 'Biểu đồ số lượng đón và trả sinh viên theo xe',
+        line: 'Biểu đồ nhiệt độ theo thời gian',
+        pie: 'Biểu đồ số lượng xe theo trạng thái',
+      },
+      label: {
+        quantity: 'SỐ LƯỢNG',
+        licenseNumber: 'BIỂN SỐ XE',
+        temperature: 'Nhiệt độ (°C)',
+        time: 'Thời gian',
+      },
+      unit: {
+        soLuongDon: 'Số lượng đón',
+        soLuongTra: 'Số lượng trả',
+        temperature: 'Nhiệt độ',
+        active: 'Hoạt động',
+        inActive: 'Không hoạt động',
+      },
+      hover: {
+        soLuongXe: 'Số lượng xe',
+      },
+    },
   },
   user: {
     label: {

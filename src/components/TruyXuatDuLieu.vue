@@ -261,10 +261,6 @@ export default {
         this.toast.error('Số lượng trả không được lớn hơn số lượng đón')
         return
       }
-      if (v._editTra < v._editDon) {
-        this.toast.error('Số lượng đón không được lớn hơn số lượng trả')
-        return
-      }
       this.loading = true
 
       try {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 280px; margin: 0 auto">
     <LineChart
       :key="$i18n.locale"
       v-if="chartData.datasets[0].data.length"
@@ -57,6 +57,7 @@ const chartData = ref({
 
 const chartOptions = ref({
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: { position: 'top' },
     title: { display: true, text: t('data.chart.title.line') },

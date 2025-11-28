@@ -55,6 +55,7 @@ export default {
   data: {
     unknown: 'Unknown',
     loading: 'Loading...',
+    listCar: 'List cars',
     table: {
       no: 'STT',
       licenseNumber: 'License Plate',

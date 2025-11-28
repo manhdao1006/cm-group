@@ -55,6 +55,7 @@ export default {
   data: {
     unknown: 'Không xác định',
     loading: 'Đang tải...',
+    listCar: 'Danh sách xe',
     table: {
       no: 'STT',
       licenseNumber: 'Biển số',

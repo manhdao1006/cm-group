@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 300px; height: 300px; margin: 0 auto">
+  <div style="width: 300px; height: 280px; margin: 0 auto">
     <PieChart
       :key="$i18n.locale"
       v-if="chartData.datasets && chartData.datasets[0]?.data.length"
@@ -36,6 +36,7 @@ const chartData = ref({
 
 const chartOptions = computed(() => ({
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: { position: 'right' },
     title: { display: true, text: t('data.chart.title.pie') },

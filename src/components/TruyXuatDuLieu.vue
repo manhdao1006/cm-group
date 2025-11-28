@@ -8,7 +8,7 @@
           <SidebarMenu :user="user" style="height: 100%" @updateCollapsed="collapsed = $event" />
         </div>
         <div class="flex-grow-1 ms-3 mt-3 me-3" style="width: 100%; height: 100%">
-          <div class="row col-12 border-bottom border-black border-1">
+          <div class="row col-12 border-bottom border-black border-1 pb-3">
             <BarChart :vehicleList="vehicleList" />
           </div>
 
@@ -19,8 +19,11 @@
             <div class="col-4"><PieChart :vehicleList="vehicleList" /></div>
           </div>
 
-          <div class="border border-dark-subtle border-2 rounded-3 p-3 bg-white shadow-sm">
-            <div class="text-black text-uppercase fs-5 fw-bolder">Danh sách xe</div>
+          <div
+            class="border border-dark-subtle border-2 rounded-3 p-3 bg-white shadow-sm"
+            style="font-size: 13px"
+          >
+            <div class="text-black text-uppercase fs-5 fw-bolder">{{ $t('data.listCar') }}</div>
             <div class="row g-2 mb-3">
               <div class="col-md-4">
                 <input
@@ -64,7 +67,14 @@
                     <th>{{ $t('data.table.createDate') }}</th>
                     <th>{{ $t('data.table.soLuongDon') }}</th>
                     <th>{{ $t('data.table.soLuongTra') }}</th>
-                    <th>{{ $t('data.table.action') }}</th>
+                    <th
+                      v-if="
+                        user.email === 'manhdao1006@gmail.com' ||
+                        user.email === 'hanam17082005@gmail.com'
+                      "
+                    >
+                      {{ $t('data.table.action') }}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -115,7 +125,12 @@
                       </template>
                     </td>
 
-                    <td>
+                    <td
+                      v-if="
+                        user.email === 'manhdao1006@gmail.com' ||
+                        user.email === 'hanam17082005@gmail.com'
+                      "
+                    >
                       <template v-if="v._isEditing">
                         <div class="d-flex">
                           <button class="btn btn-sm text-success" @click="saveRow(v)">

@@ -28,7 +28,6 @@
           <div class="col-12 col-lg-10 col-xl-8">
             <div class="card login-card p-4 p-lg-5">
               <div class="row">
-                <!-- FORM -->
                 <div class="col-12 col-lg-5 text-black">
                   <div class="fw-bold text-uppercase fs-5">
                     {{ $t('auth.title.login') }}
@@ -125,14 +124,12 @@
                   </form>
                 </div>
 
-                <!-- DIVIDER -->
                 <div
                   class="col-12 col-lg-2 d-flex align-items-center justify-content-center isHiddenMobile"
                 >
                   <div class="divider-vertical"></div>
                 </div>
 
-                <!-- LOGO -->
                 <div
                   class="col-12 mt-5 col-lg-5 align-items-center justify-content-center text-center isHiddenMobile"
                 >

@@ -537,6 +537,6 @@ export default {
   color: #ffffff;
 }
 .list-group-item-hover:hover {
-  background-color: #e0e0e0; /* màu hover */
+  background-color: #e0e0e0;
 }
 </style>

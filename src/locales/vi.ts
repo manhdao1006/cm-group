@@ -68,6 +68,9 @@ export default {
       active: 'Hoạt động',
       inactive: 'Tắt',
       noData: 'Không có dữ liệu phù hợp.',
+      soLuongDon: 'Số lượng đón',
+      soLuongTra: 'Số lượng trả',
+      action: 'Thao tác',
     },
     button: {
       search: 'Tìm kiếm theo tên xe, biển số, hoặc tài xế',

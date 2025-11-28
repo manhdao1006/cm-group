@@ -68,6 +68,9 @@ export default {
       active: 'Active',
       inactive: 'Off',
       noData: 'No matching data.',
+      soLuongDon: 'Pickup quantity',
+      soLuongTra: 'Return quantity',
+      action: 'Action',
     },
     button: {
       search: 'Search by vehicle name, license plate, or driver',

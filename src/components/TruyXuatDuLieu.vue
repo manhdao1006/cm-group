@@ -9,7 +9,6 @@
         </div>
         <div class="flex-grow-1 ms-3 mt-3 me-3" style="width: 100%; height: 100%">
           <div class="border border-dark-subtle border-2 rounded-3 p-3 bg-white shadow-sm">
-            <!-- Bộ lọc tìm kiếm -->
             <div class="row g-2 mb-3">
               <div class="col-md-4">
                 <input
@@ -38,7 +37,6 @@
               </div>
             </div>
 
-            <!-- Bảng dữ liệu -->
             <div class="table-responsive" style="max-height: 550px; overflow-y: auto">
               <table class="table table-striped table-bordered align-middle text-center">
                 <thead class="table-light">
@@ -52,6 +50,9 @@
                     <th>{{ $t('data.table.address') }}</th>
                     <th>{{ $t('data.table.status') }}</th>
                     <th>{{ $t('data.table.createDate') }}</th>
+                    <th>{{ $t('data.table.soLuongDon') }}</th>
+                    <th>{{ $t('data.table.soLuongTra') }}</th>
+                    <th>{{ $t('data.table.action') }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -74,6 +75,52 @@
                       </span>
                     </td>
                     <td>{{ v.ngayNhap }}</td>
+                    <td>
+                      <template v-if="v._isEditing">
+                        <input
+                          type="number"
+                          class="form-control"
+                          v-model.number="v._editDon"
+                          min="0"
+                        />
+                      </template>
+                      <template v-else>
+                        {{ v.soLuongDon }}
+                      </template>
+                    </td>
+
+                    <td>
+                      <template v-if="v._isEditing">
+                        <input
+                          type="number"
+                          class="form-control"
+                          v-model.number="v._editTra"
+                          min="0"
+                        />
+                      </template>
+                      <template v-else>
+                        {{ v.soLuongTra }}
+                      </template>
+                    </td>
+
+                    <td>
+                      <template v-if="v._isEditing">
+                        <div class="d-flex">
+                          <button class="btn btn-sm text-success" @click="saveRow(v)">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                          </button>
+                          <button class="btn btn-sm text-danger" @click="cancelEdit(v)">
+                            <i class="fa-solid fa-ban"></i>
+                          </button>
+                        </div>
+                      </template>
+
+                      <template v-else>
+                        <button class="btn btn-sm text-warning" @click="editRow(v)">
+                          <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                      </template>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -122,10 +169,14 @@
         </div>
       </div>
     </div>
+    <div v-if="loading" class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
   </div>
 </template>
 
 <script>
+import { useToast } from 'vue-toastification'
 import * as XLSX from 'xlsx'
 import BaseHeader from './common/BaseHeader.vue'
 import SidebarMenu from './common/SidebarMenu.vue'
@@ -141,11 +192,16 @@ export default {
       filterStatus: '',
       sheetId: '1azXTmdVEGAJkRxF6fxtVKt5LxMHo_Vp4xubCB_9wmSs',
       apiKey: 'AIzaSyBJOLTWvnRRegbkw1rRvr0K2dzV9SZ_Mwk',
-      range: 'A:J',
+      range: 'A:L',
       currentPage: 1,
       itemsPerPage: 10,
       user: JSON.parse(localStorage.getItem('googleUser') || 'null'),
       collapsed: false,
+      message: '',
+      toast: null,
+      success: false,
+
+      loading: false,
     }
   },
 
@@ -178,6 +234,65 @@ export default {
   },
 
   methods: {
+    editRow(v) {
+      v._isEditing = true
+      v._editDon = v.soLuongDon
+      v._editTra = v.soLuongTra
+    },
+    cancelEdit(v) {
+      v._isEditing = false
+    },
+    async saveRow(v) {
+      this.loading = true
+
+      try {
+        const params = new URLSearchParams({
+          action: 'saveSoLuong',
+          bienSoXe: v.bienSoXe,
+          tenXe: v.tenXe,
+          trangThai: v.trangThai,
+          lng: v.lng,
+          lat: v.lat,
+          nhietDo: v.nhietDo,
+          maNhanVien: v.maNhanVien,
+          tenTaiXe: v.tenTaiXe,
+          soDienThoai: v.soDienThoai,
+          soLuongDon: v._editDon || 0,
+          soLuongTra: v._editTra || 0,
+        }).toString()
+
+        const baseUrl =
+          'https://script.google.com/macros/s/AKfycbwsxM1nFX50O9haEMlt1TUE8Lj1ABvpGpwtPyLenEV3P_iiGMRtvkTd99c66uCpbcuwoQ/exec?' +
+          params
+
+        const res = await fetch(baseUrl)
+        const data = await res.json()
+
+        if (data.status === 'success') {
+          this.message = this.$t('notification.successSave')
+          this.success = true
+          this.toast.success(this.message)
+          this.fetchSheetData()
+        } else {
+          this.message = this.$t('notification.error') + data.message
+          this.success = false
+          this.toast.error(this.message)
+          this.fetchSheetData()
+        }
+        v.soLuongDon = v._editDon
+        v.soLuongTra = v._editTra
+        v._isEditing = false
+      } catch (error) {
+        this.message = this.$t('notification.error') + error.message
+        this.success = false
+        this.toast.error(this.message)
+        this.fetchSheetData()
+      } finally {
+        this.loading = false
+        this.fetchSheetData()
+      }
+    },
+
     prevPage() {
       if (this.currentPage > 1) this.currentPage--
     },
@@ -202,6 +317,8 @@ export default {
         [this.$t('data.table.status')]:
           v.trangThai === '1' ? [this.$t('data.table.active')] : [this.$t('data.table.inactive')],
         [this.$t('data.table.createDate')]: v.ngayNhap,
+        [this.$t('data.table.soLuongDon')]: v.soLuongDon,
+        [this.$t('data.table.soLuongTra')]: v.soLuongTra,
       }))
 
       const ws = XLSX.utils.json_to_sheet(data)
@@ -258,6 +375,8 @@ export default {
             maNhanVien = '-',
             tenTaiXe = '-',
             soDienThoai = '-',
+            soLuongDon = '',
+            soLuongTra = '',
           ] = row
 
           const lat = parseFloat(this.normalizeNumberString(latStr))
@@ -280,6 +399,8 @@ export default {
                 : soDienThoai
               : '-',
             address: this.$t('data.loading'),
+            soLuongDon,
+            soLuongTra,
           })
         }
 
@@ -328,11 +449,34 @@ export default {
 
   mounted() {
     this.fetchSheetData()
+    this.toast = useToast()
   },
 }
 </script>
 
 <style scoped>
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3490dc;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
 .table th,
 .table td {
   vertical-align: middle !important;

@@ -264,7 +264,6 @@ export default {
   position: relative;
 }
 
-/* Overlay toàn màn hình khi loading */
 .loading-overlay {
   position: absolute;
   top: 0;
@@ -278,10 +277,9 @@ export default {
   z-index: 50;
 }
 
-/* Spinner */
 .spinner {
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #3490dc; /* màu xanh */
+  border-top: 4px solid #3490dc;
   border-radius: 50%;
   width: 50px;
   height: 50px;

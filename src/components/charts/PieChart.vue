@@ -25,7 +25,7 @@ const chartData = ref({
     {
       label: 'Số lượng xe',
       data: [],
-      backgroundColor: ['green', 'red', '#FFCE56', '#4BC0C0', '#9966FF'],
+      backgroundColor: ['#3782f5', 'red', '#FFCE56', '#4BC0C0', '#9966FF'],
       hoverOffset: 10,
     },
   ],

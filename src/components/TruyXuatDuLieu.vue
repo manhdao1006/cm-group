@@ -13,10 +13,10 @@
           </div>
 
           <div class="row mt-3 mb-3">
-            <div class="col-6 border-end border-black border-1">
+            <div class="col-8 border-end border-black border-1">
               <LineChart :vehicleList="vehicleList" />
             </div>
-            <div class="col-6"><PieChart :vehicleList="vehicleList" /></div>
+            <div class="col-4"><PieChart :vehicleList="vehicleList" /></div>
           </div>
 
           <div class="border border-dark-subtle border-2 rounded-3 p-3 bg-white shadow-sm">

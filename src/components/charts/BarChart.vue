@@ -49,7 +49,7 @@ const chartOptions = {
     x: {
       title: {
         display: true,
-        text: 'XE',
+        text: 'BIỂN SỐ XE',
         font: {
           weight: 'bold',
           size: 16,
@@ -75,7 +75,7 @@ watch(
   (list) => {
     if (!list.length) return
 
-    chartData.value.labels = list.map((v) => v.tenXe || 'Chưa đặt tên')
+    chartData.value.labels = list.map((v) => v.bienSoXe || 'Chưa đặt tên')
 
     chartData.value.datasets[0].data = list.map((v) => parseInt(v.soLuongDon) || 0)
     chartData.value.datasets[1].data = list.map((v) => parseInt(v.soLuongTra) || 0)

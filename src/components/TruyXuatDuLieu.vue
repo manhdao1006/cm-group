@@ -350,31 +350,53 @@ export default {
         if (!data.values) return
 
         const rows = data.values.slice(1)
-        const latestByBienSo = {}
+        const recordsByBienSo = {}
 
         rows.forEach((row) => {
           const bienSoXe = row[1]
+          if (!bienSoXe) return
+
           const [datePart, timePart] = row[0].split(' ')
           const [day, month, year] = datePart.split('/')
           const ngayNhap = new Date(`${year}-${month}-${day}T${timePart}`)
 
-          if (bienSoXe && !isNaN(ngayNhap)) {
-            const current = latestByBienSo[bienSoXe]
-            if (!current) {
-              latestByBienSo[bienSoXe] = row
-            } else {
-              const [curDatePart, curTimePart] = current[0].split(' ')
-              const [curDay, curMonth, curYear] = curDatePart.split('/')
-              const currentNgayNhap = new Date(`${curYear}-${curMonth}-${curDay}T${curTimePart}`)
+          if (isNaN(ngayNhap)) return
 
-              if (ngayNhap > currentNgayNhap) {
-                latestByBienSo[bienSoXe] = row
-              }
-            }
+          if (!recordsByBienSo[bienSoXe]) {
+            recordsByBienSo[bienSoXe] = []
           }
+
+          recordsByBienSo[bienSoXe].push({
+            ngayNhap,
+            row,
+          })
         })
 
-        const latestRows = Object.values(latestByBienSo)
+        const latestRows = []
+
+        Object.keys(recordsByBienSo).forEach((bienSo) => {
+          const list = recordsByBienSo[bienSo].sort((a, b) => b.ngayNhap - a.ngayNhap)
+
+          const newest = list[0].row
+
+          let soLuongDon = newest[10]
+          let soLuongTra = newest[11]
+
+          if (!soLuongDon || soLuongDon === '' || !soLuongTra || soLuongTra === '') {
+            for (let i = 1; i < list.length; i++) {
+              const older = list[i].row
+              if ((!soLuongDon || soLuongDon === '') && older[10]) soLuongDon = older[10]
+              if ((!soLuongTra || soLuongTra === '') && older[11]) soLuongTra = older[11]
+              if (soLuongDon && soLuongTra) break
+            }
+          }
+
+          newest[10] = soLuongDon || '0'
+          newest[11] = soLuongTra || '0'
+
+          latestRows.push(newest)
+        })
+
         const vehicles = []
 
         for (const row of latestRows) {

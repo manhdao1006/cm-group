@@ -62,12 +62,26 @@ const chartOptions = {
         displayFormats: { hour: 'HH:mm' },
         tooltipFormat: 'dd/MM/yyyy HH:mm',
       },
-      title: { display: true, text: 'Thời gian' },
+      title: {
+        display: true,
+        text: 'Thời gian',
+        font: {
+          weight: 'bold',
+          size: 16,
+        },
+      },
       min: new Date('2025-11-28T08:00:00'),
       max: new Date('2025-11-28T18:00:00'),
     },
     y: {
-      title: { display: true, text: 'Nhiệt độ (°C)' },
+      title: {
+        display: true,
+        text: 'Nhiệt độ (°C)',
+        font: {
+          weight: 'bold',
+          size: 16,
+        },
+      },
       suggestedMin: 20,
       suggestedMax: 40,
     },

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 500px; margin: 0 auto">
     <BarChart v-if="chartData.datasets[0].data.length" :data="chartData" :options="chartOptions" />
   </div>
 </template>
@@ -46,8 +46,27 @@ const chartOptions = {
     title: { display: true, text: 'Biểu đồ số lượng đón và trả sinh viên theo xe' },
   },
   scales: {
-    x: { title: { display: true, text: 'Xe' } },
-    y: { title: { display: true, text: 'Số lượng' }, beginAtZero: true },
+    x: {
+      title: {
+        display: true,
+        text: 'XE',
+        font: {
+          weight: 'bold',
+          size: 16,
+        },
+      },
+    },
+    y: {
+      title: {
+        display: true,
+        text: 'SỐ LƯỢNG',
+        font: {
+          weight: 'bold',
+          size: 16,
+        },
+      },
+      beginAtZero: true,
+    },
   },
 }
 

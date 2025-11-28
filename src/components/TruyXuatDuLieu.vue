@@ -8,7 +8,17 @@
           <SidebarMenu :user="user" style="height: 100%" @updateCollapsed="collapsed = $event" />
         </div>
         <div class="flex-grow-1 ms-3 mt-3 me-3" style="width: 100%; height: 100%">
+          <div class="row">
+            <div class="col-6"><LineChart :vehicleList="vehicleList" /></div>
+            <div class="col-6"><PieChart :vehicleList="vehicleList" /></div>
+          </div>
+
+          <div class="row col-12">
+            <BarChart :vehicleList="vehicleList" />
+          </div>
+
           <div class="border border-dark-subtle border-2 rounded-3 p-3 bg-white shadow-sm">
+            <div class="text-black text-uppercase fs-5 fw-bolder">Danh sách xe</div>
             <div class="row g-2 mb-3">
               <div class="col-md-4">
                 <input
@@ -178,12 +188,15 @@
 <script>
 import { useToast } from 'vue-toastification'
 import * as XLSX from 'xlsx'
+import BarChart from './charts/BarChart.vue'
+import LineChart from './charts/LineChart.vue'
+import PieChart from './charts/PieChart.vue'
 import BaseHeader from './common/BaseHeader.vue'
 import SidebarMenu from './common/SidebarMenu.vue'
 
 export default {
   name: 'TruyXuatDuLieu',
-  components: { BaseHeader, SidebarMenu },
+  components: { BaseHeader, SidebarMenu, LineChart, PieChart, BarChart },
 
   data() {
     return {
@@ -200,7 +213,6 @@ export default {
       message: '',
       toast: null,
       success: false,
-
       loading: false,
     }
   },
@@ -272,12 +284,12 @@ export default {
           this.message = this.$t('notification.successSave')
           this.success = true
           this.toast.success(this.message)
-          this.fetchSheetData()
+          window.location.reload()
         } else {
           this.message = this.$t('notification.error') + data.message
           this.success = false
           this.toast.error(this.message)
-          this.fetchSheetData()
+          window.location.reload()
         }
         v.soLuongDon = v._editDon
         v.soLuongTra = v._editTra
@@ -286,10 +298,10 @@ export default {
         this.message = this.$t('notification.error') + error.message
         this.success = false
         this.toast.error(this.message)
-        this.fetchSheetData()
+        window.location.reload()
       } finally {
         this.loading = false
-        this.fetchSheetData()
+        window.location.reload()
       }
     },
 
@@ -456,7 +468,7 @@ export default {
 
 <style scoped>
 .loading-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -465,7 +477,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 50;
+  z-index: 9999;
 }
 
 .spinner {
@@ -475,6 +487,15 @@ export default {
   width: 50px;
   height: 50px;
   animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .table th,

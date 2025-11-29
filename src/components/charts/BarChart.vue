@@ -77,10 +77,12 @@ watch(
   (list) => {
     if (!list.length) return
 
-    chartData.value.labels = list.map((v) => v.bienSoXe || 'Chưa đặt tên')
+    const filtered = list.filter((v) => parseInt(v.soLuongDon) > 0)
 
-    chartData.value.datasets[0].data = list.map((v) => parseInt(v.soLuongDon) || 0)
-    chartData.value.datasets[1].data = list.map((v) => parseInt(v.soLuongTra) || 0)
+    chartData.value.labels = filtered.map((v) => v.bienSoXe || 'Chưa đặt tên')
+
+    chartData.value.datasets[0].data = filtered.map((v) => parseInt(v.soLuongDon) || 0)
+    chartData.value.datasets[1].data = filtered.map((v) => parseInt(v.soLuongTra) || 0)
   },
   { immediate: true },
 )

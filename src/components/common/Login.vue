@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="home-container p-0 m-0"
-    style="background: linear-gradient(135deg, #000000 0%, #ff0000 100%)"
-    role="main"
-  >
+  <div class="home-container p-0 m-0" role="main">
     <div class="hero-section p-0">
       <div class="container pt-3 pb-3">
         <LanguageSwitcher class="position-absolute top-0 start-0 m-3" />

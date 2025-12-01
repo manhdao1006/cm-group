@@ -21,6 +21,7 @@
 import {
   CategoryScale,
   Chart as ChartJS,
+  Filler,
   Legend,
   LinearScale,
   LineElement,
@@ -43,6 +44,7 @@ ChartJS.register(
   LinearScale,
   TimeScale,
   CategoryScale,
+  Filler,
 )
 
 const props = defineProps({
@@ -51,15 +53,32 @@ const props = defineProps({
 const { t } = useI18n()
 const currentDate = ref(null)
 
+const createGradient = (ctx, chartArea) => {
+  if (!chartArea) return 'rgba(220, 20, 20, 0.3)'
+
+  const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom)
+  gradient.addColorStop(0, 'rgba(220, 20, 20, 0.9)')
+  gradient.addColorStop(0.4, 'rgba(255, 69, 0, 0.6)')
+  gradient.addColorStop(0.7, 'rgba(255, 140, 0, 0.3)')
+  gradient.addColorStop(1, 'rgba(255, 165, 0, 0.1)')
+  return gradient
+}
+
 const chartData = ref({
   datasets: [
     {
       label: t('data.chart.hover.soLuongXe'),
       data: [],
-      borderColor: 'red',
-      backgroundColor: 'orange',
+      borderColor: 'rgb(220, 20, 20)',
+      backgroundColor: (context) => {
+        const chart = context.chart
+        const { ctx, chartArea } = chart
+        return createGradient(ctx, chartArea)
+      },
       fill: true,
       tension: 0.4,
+      pointRadius: 4,
+      pointHoverRadius: 6,
     },
   ],
 })
@@ -76,6 +95,9 @@ const chartOptions = ref({
   plugins: {
     legend: { position: 'top' },
     title: { display: true, text: t('data.chart.title.line') },
+    filler: {
+      propagate: false,
+    },
   },
   scales: {
     x: {

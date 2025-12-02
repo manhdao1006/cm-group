@@ -9,7 +9,7 @@ export default function preventDevTools() {
       (event.ctrlKey && event.key === 'U')
     ) {
       event.preventDefault()
-      alert('❌ Chức năng Developer Tools đã bị vô hiệu hóa!')
+      alert('❌ Không được!')
       return false
     }
   })
@@ -17,7 +17,7 @@ export default function preventDevTools() {
   // 🛑 2. Chặn chuột phải
   document.addEventListener('contextmenu', function (event) {
     event.preventDefault()
-    alert('❌ Không được phép sử dụng chuột phải!')
+    alert('❌ Không được!')
   })
 
   // 🕵️‍♂️ 3. Phát hiện DevTools mở
@@ -30,7 +30,7 @@ export default function preventDevTools() {
 
     if (end - start > threshold) {
       document.body.innerHTML =
-        "<h1 style='text-align:center;margin-top:20%;color:red;'>🚫 Không được phép mở Developer Tools!</h1>"
+        "<h1 style='text-align:center;margin-top:20%;color:red;'>❌ Không được!</h1>"
       clearInterval(detectDevTools)
     }
   }, 1000)

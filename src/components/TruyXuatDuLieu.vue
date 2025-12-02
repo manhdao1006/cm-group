@@ -348,7 +348,7 @@ export default {
         [this.$t('data.table.phoneNumber')]: v.soDienThoai,
         [this.$t('data.table.address')]: v.address,
         [this.$t('data.table.status')]:
-          v.trangThai === '1' ? [this.$t('data.table.active')] : [this.$t('data.table.inactive')],
+          v.trangThai === '1' ? this.$t('data.table.active') : this.$t('data.table.inactive'),
         [this.$t('data.table.createDate')]: v.ngayNhap,
         [this.$t('data.table.soLuongDon')]: v.soLuongDon,
         [this.$t('data.table.soLuongTra')]: v.soLuongTra,
@@ -357,7 +357,7 @@ export default {
       const ws = XLSX.utils.json_to_sheet(data)
       const wb = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(wb, ws, 'PhuongTien')
-      XLSX.writeFile(wb, 'ListData.xlsx')
+      XLSX.writeFile(wb, 'Danh sách xe.xlsx')
     },
 
     async fetchSheetData() {

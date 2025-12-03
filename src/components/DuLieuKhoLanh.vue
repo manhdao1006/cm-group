@@ -223,22 +223,22 @@ export default {
       const data = this.filteredKhoList.map((v, i) => ({
         STT: i + 1,
         [this.$t('khoLanh.table.maKho')]: v.maKho,
-        [this.$t('khoLanh.table.carName')]: v.tenXe,
-        [this.$t('khoLanh.table.temperature')]: v.nhietDo,
-        [this.$t('khoLanh.table.driverName')]: v.tenTaiXe,
-        [this.$t('khoLanh.table.phoneNumber')]: v.soDienThoai,
-        [this.$t('khoLanh.table.address')]: v.address,
-        [this.$t('khoLanh.table.status')]:
-          v.trangThai === '1' ? this.$t('khoLanh.table.active') : this.$t('khoLanh.table.inactive'),
+        [this.$t('khoLanh.table.loaiKho')]: v.loaiKho,
+        [this.$t('khoLanh.table.hangHoa')]: v.hangHoa,
+        [this.$t('khoLanh.table.toaNha')]: v.toaNha,
+        [this.$t('khoLanh.table.nhietDo')]: v.nhietDo,
+        [this.$t('khoLanh.table.doAm')]: v.doAm,
+        [this.$t('khoLanh.table.coNguoi')]:
+          v.coNguoi === '1'
+            ? this.$t('khoLanh.table.hasPerson')
+            : this.$t('khoLanh.table.noPerson'),
         [this.$t('khoLanh.table.createDate')]: v.thoiGian,
-        [this.$t('khoLanh.table.soLuongDon')]: v.soLuongDon,
-        [this.$t('khoLanh.table.soLuongTra')]: v.soLuongTra,
       }))
 
       const ws = XLSX.utils.json_to_sheet(data)
       const wb = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(wb, ws, 'PhuongTien')
-      XLSX.writeFile(wb, 'Danh sách xe.xlsx')
+      XLSX.utils.book_append_sheet(wb, ws, 'KhoLanh')
+      XLSX.writeFile(wb, 'Danh sách kho.xlsx')
     },
 
     async fetchSheetData() {

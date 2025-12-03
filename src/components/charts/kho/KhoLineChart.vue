@@ -10,7 +10,7 @@
       v-if="currentDate"
       class="btn btn-sm btn-secondary"
       @click="currentDate = null"
-      style="margin-top: -550px"
+      style="margin-top: -700px"
     >
       {{ $t('data.button.viewByDay') }}
     </button>

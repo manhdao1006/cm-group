@@ -67,7 +67,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(v, index) in filteredKhoList" :key="v.maKho">
+                  <tr v-for="(v, index) in paginatedList" :key="v.maKho">
                     <td>{{ index + 1 }}</td>
                     <td>{{ v.maKho }}</td>
                     <td>{{ v.loaiKho }}</td>

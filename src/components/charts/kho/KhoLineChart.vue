@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 280px; margin: 0 auto">
+  <div style="height: 350px; margin: 0 auto">
     <LineChart
       :key="$i18n.locale + (currentDate ? currentDate : '')"
       v-if="chartData.datasets[0].data.length"

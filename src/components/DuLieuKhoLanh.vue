@@ -186,7 +186,7 @@ export default {
 
           return matchText && matchLoaiKho
         })
-        .sort((a, b) => new Date(b.thoiGian).getTime() - new Date(a.thoiGian).getTime())
+        .sort((a, b) => this.parseThoiGian(b.thoiGian) - this.parseThoiGian(a.thoiGian))
     },
 
     totalPages() {
@@ -201,6 +201,12 @@ export default {
   },
 
   methods: {
+    parseThoiGian(str) {
+      const [date, time] = str.split(' ')
+      const [day, month, year] = date.split('/')
+      const [hours, minutes, seconds] = time.split(':')
+      return new Date(+year, +month - 1, +day, +hours, +minutes, +seconds)
+    },
     prevPage() {
       if (this.currentPage > 1) this.currentPage--
     },

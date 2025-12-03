@@ -248,7 +248,7 @@ export default {
 
           return matchText && matchStatus
         })
-        .sort((a, b) => new Date(b.ngayNhap).getTime() - new Date(a.ngayNhap).getTime())
+        .sort((a, b) => this.parseNgayNhap(b.ngayNhap) - this.parseNgayNhap(a.ngayNhap))
     },
 
     totalPages() {
@@ -263,6 +263,12 @@ export default {
   },
 
   methods: {
+    parseNgayNhap(str) {
+      const [date, time] = str.split(' ')
+      const [day, month, year] = date.split('/')
+      const [hours, minutes, seconds] = time.split(':')
+      return new Date(+year, +month - 1, +day, +hours, +minutes, +seconds)
+    },
     editRow(v) {
       v._isEditing = true
       v._editDon = v.soLuongDon

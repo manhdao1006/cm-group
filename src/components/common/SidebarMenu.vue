@@ -30,6 +30,7 @@ export default {
         { to: '/', label: 'header.navigation.homePage' },
         { to: '/map-bus', label: 'header.navigation.mapBus' },
         { to: '/du-lieu', label: 'header.navigation.data' },
+        { to: '/kho-lanh', label: 'header.navigation.khoLanh' },
         { to: '/quan-ly-nguoi-dung', label: 'header.navigation.account' },
       ],
       toast: useToast(),
@@ -41,7 +42,7 @@ export default {
       this.$emit('updateCollapsed', this.collapsed)
     },
     checkLogin(path) {
-      const protectedRoutes = ['/map-bus', '/du-lieu', '/quan-ly-nguoi-dung']
+      const protectedRoutes = ['/map-bus', '/du-lieu', '/quan-ly-nguoi-dung', '/kho-lanh']
       if (!this.user && protectedRoutes.includes(path)) {
         this.toast.error(this.$t('notification.checkLogin'))
         return

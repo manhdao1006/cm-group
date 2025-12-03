@@ -78,7 +78,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(v, index) in filteredVehicleList" :key="v.bienSoXe">
+                  <tr v-for="(v, index) in paginatedList" :key="v.bienSoXe">
                     <td>{{ index + 1 }}</td>
                     <td>{{ v.bienSoXe }}</td>
                     <!-- <td>{{ v.tenXe }}</td> -->
@@ -222,7 +222,7 @@ export default {
       filterStatus: '',
       sheetId: '1azXTmdVEGAJkRxF6fxtVKt5LxMHo_Vp4xubCB_9wmSs',
       apiKey: 'AIzaSyBJOLTWvnRRegbkw1rRvr0K2dzV9SZ_Mwk',
-      range: 'A:L',
+      range: 'DATA!A:L',
       currentPage: 1,
       itemsPerPage: 10,
       user: JSON.parse(localStorage.getItem('googleUser') || 'null'),

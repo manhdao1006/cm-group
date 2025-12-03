@@ -28,6 +28,7 @@ export default {
       data: 'Truy xuất dữ liệu',
       account: 'Quản lý người dùng',
       system: 'Hệ thống',
+      khoLanh: 'Dữ liệu kho lạnh',
     },
   },
   homePage: {
@@ -127,6 +128,61 @@ export default {
     },
     button: {
       save: 'Lưu',
+    },
+  },
+  khoLanh: {
+    unknown: 'Không xác định',
+    loading: 'Đang tải...',
+    listKho: 'Danh sách kho',
+    table: {
+      no: 'STT',
+      maKho: 'Mã kho',
+      loaiKho: 'Loại kho',
+      hangHoa: 'Hàng hóa',
+      toaNha: 'Tòa nhà',
+      nhietDo: 'Nhiệt độ (°C)',
+      doAm: 'Độ ẩm (%)',
+      coNguoi: 'Có người',
+      createDate: 'Thời gian',
+      hasPerson: 'Có',
+      noPerson: 'Không',
+      noData: 'Không có dữ liệu phù hợp.',
+    },
+    button: {
+      search: 'Tìm kiếm theo mã kho, hàng hóa, tòa nhà',
+      filter: {
+        all: '--Loại kho--',
+        kho: 'Khô',
+        lanh: 'Lạnh',
+      },
+      reload: 'Tải lại',
+      exportExcel: 'Xuất Excel',
+      firstPage: 'Trước',
+      lastPage: 'Sau',
+      viewByDay: 'Xem theo ngày',
+    },
+    pagination: {
+      display: 'Hiển thị',
+      rowPerPage: 'hàng mỗi trang',
+    },
+    chart: {
+      title: {
+        bar: 'Biểu đồ số lượng đón và trả sinh viên theo xe',
+        line: 'Biểu đồ nhiệt độ và độ ẩm theo thời gian',
+      },
+      label: {
+        nhietDo: 'Nhiệt độ (°C)',
+        doAm: 'Độ ẩm (%)',
+        time: 'Thời gian',
+      },
+      unit: {
+        nhietDo: 'Nhiệt độ (°C)',
+        doAm: 'Độ ẩm (%)',
+      },
+      hover: {
+        nhietDo: 'Nhiệt độ (°C)',
+        doAm: 'Độ ẩm (%)',
+      },
     },
   },
 }

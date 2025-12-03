@@ -199,6 +199,7 @@ export default {
           icon: 'fas fa-map-marked-alt',
         },
         { to: '/du-lieu', label: this.$t('header.navigation.data'), icon: 'fas fa-database' },
+        { to: '/kho-lanh', label: this.$t('header.navigation.khoLanh'), icon: 'fas fa-warehouse' },
         {
           to: '/quan-ly-nguoi-dung',
           label: this.$t('header.navigation.account'),

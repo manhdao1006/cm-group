@@ -28,6 +28,7 @@ export default {
       data: 'Retrieve data',
       account: 'Manage users',
       system: 'System',
+      khoLanh: 'Cold storage data',
     },
   },
   homePage: {
@@ -127,6 +128,61 @@ export default {
     },
     button: {
       save: 'Save',
+    },
+  },
+  khoLanh: {
+    unknown: 'Unknown',
+    loading: 'Loading...',
+    listKho: 'List of warehouses',
+    table: {
+      no: 'STT',
+      maKho: 'Warehouse code',
+      loaiKho: 'Warehouse type',
+      hangHoa: 'Goods',
+      toaNha: 'Building',
+      nhietDo: 'Temperature (°C)',
+      doAm: 'Humidity (%)',
+      coNguoi: 'There are people',
+      createDate: 'Time',
+      hasPerson: 'Yes',
+      noPerson: 'No',
+      noData: 'No matching data.',
+    },
+    button: {
+      search: 'Search by warehouse code, goods, building',
+      filter: {
+        all: '--Warehouse type--',
+        warehouse: 'Dry',
+        cold: 'Cold',
+      },
+      reload: 'Reload',
+      exportExcel: 'Export Excel',
+      firstPage: 'Previous',
+      lastPage: 'Next',
+      viewByDay: 'View by day',
+    },
+    pagination: {
+      display: 'Display',
+      rowPerPage: 'rows per page',
+    },
+    chart: {
+      title: {
+        bar: 'Chart of number of students picked up and dropped off by bus',
+        line: 'Chart of temperature and humidity over time',
+      },
+      label: {
+        nhietDo: 'Temperature (°C)',
+        doAm: 'Humidity (%)',
+        time: 'Time',
+      },
+      unit: {
+        nhietDo: 'Temperature (°C)',
+        doAm: 'Humidity (%)',
+      },
+      hover: {
+        nhietDo: 'Temperature (°C)',
+        doAm: 'Humidity (%)',
+      },
     },
   },
 }

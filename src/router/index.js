@@ -1,4 +1,5 @@
 import Login from '@/components/common/Login.vue'
+import DuLieuKhoLanh from '@/components/DuLieuKhoLanh.vue'
 import QuanLyNguoiDung from '@/components/QuanLyNguoiDung.vue'
 import TrangChu from '@/components/TrangChu.vue'
 import TruyXuatDuLieu from '@/components/TruyXuatDuLieu.vue'
@@ -6,6 +7,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MapBus from '../components/MapBus.vue'
 
 const routes = [
+  {
+    path: '/kho-lanh',
+    name: 'DuLieuKhoLanh',
+    component: DuLieuKhoLanh,
+    meta: { requiresAuth: true },
+  },
   {
     path: '/du-lieu',
     name: 'TruyXuatDuLieu',

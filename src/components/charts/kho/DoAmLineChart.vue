@@ -53,15 +53,6 @@ const props = defineProps({
 const { t } = useI18n()
 const currentDate = ref(null)
 
-const createTempGradient = (ctx, chartArea) => {
-  if (!chartArea) return 'rgba(220, 20, 20, 0.3)'
-  const g = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom)
-  g.addColorStop(0, 'rgba(220, 20, 20, 0.9)')
-  g.addColorStop(0.4, 'rgba(255, 80, 0, 0.6)')
-  g.addColorStop(1, 'rgba(255, 140, 0, 0.2)')
-  return g
-}
-
 const createHumidityGradient = (ctx, chartArea) => {
   if (!chartArea) return 'rgba(20, 80, 220, 0.3)'
   const g = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom)
@@ -74,17 +65,6 @@ const createHumidityGradient = (ctx, chartArea) => {
 const chartData = ref({
   datasets: [
     {
-      label: t('khoLanh.chart.hover.nhietDo'),
-      data: [],
-      borderColor: 'rgb(220, 20, 20)',
-      backgroundColor: (ctx) => createTempGradient(ctx.chart.ctx, ctx.chart.chartArea),
-      fill: true,
-      tension: 0.4,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      yAxisID: 'yTemp',
-    },
-    {
       label: t('khoLanh.chart.hover.doAm'),
       data: [],
       borderColor: 'rgb(20, 80, 220)',
@@ -93,7 +73,7 @@ const chartData = ref({
       tension: 0.4,
       pointRadius: 4,
       pointHoverRadius: 6,
-      yAxisID: 'yHumidity',
+      yAxisID: 'yTemp',
     },
   ],
 })
@@ -107,8 +87,16 @@ const chartOptions = ref({
     currentDate.value = chartData.value.datasets[0].data[index].x
   },
   plugins: {
+    tooltip: {
+      callbacks: {
+        label: function (ctx) {
+          const item = ctx.raw
+          return item.maKho ? `Kho ${item.maKho}: ${item.y}°C` : `${item.y}°C`
+        },
+      },
+    },
     legend: { position: 'top' },
-    title: { display: true, text: t('khoLanh.chart.title.line') },
+    title: { display: true, text: t('khoLanh.chart.title.lineDoAm') },
   },
   scales: {
     x: {
@@ -125,42 +113,27 @@ const chartOptions = ref({
       position: 'left',
       title: {
         display: true,
-        text: t('khoLanh.chart.label.nhietDo'),
-        font: { weight: 'bold', size: 16 },
-      },
-      suggestedMin: 0,
-      suggestedMax: 50,
-    },
-    yHumidity: {
-      type: 'linear',
-      position: 'right',
-      title: {
-        display: true,
         text: t('khoLanh.chart.label.doAm'),
         font: { weight: 'bold', size: 16 },
       },
       suggestedMin: 0,
       suggestedMax: 100,
-      grid: { drawOnChartArea: false },
     },
   },
 })
 
 watch(
   () => [
-    t('khoLanh.chart.unit.nhietDo'),
     t('khoLanh.chart.unit.doAm'),
-    t('khoLanh.chart.title.line'),
+    t('khoLanh.chart.title.lineDoAm'),
     t('khoLanh.chart.label.time'),
   ],
   () => {
-    chartData.value.datasets[0].label = t('khoLanh.chart.unit.nhietDo')
-    chartData.value.datasets[1].label = t('khoLanh.chart.unit.doAm')
+    chartData.value.datasets[0].label = t('khoLanh.chart.unit.doAm')
 
-    chartOptions.value.plugins.title.text = t('khoLanh.chart.title.line')
+    chartOptions.value.plugins.title.text = t('khoLanh.chart.title.lineDoAm')
     chartOptions.value.scales.x.title.text = t('khoLanh.chart.label.time')
-    chartOptions.value.scales.yTemp.title.text = t('khoLanh.chart.unit.nhietDo')
-    chartOptions.value.scales.yHumidity.title.text = t('khoLanh.chart.unit.doAm')
+    chartOptions.value.scales.yTemp.title.text = t('khoLanh.chart.unit.doAm')
   },
 )
 
@@ -187,22 +160,14 @@ watch(
 
       chartData.value.datasets[0].data = list.map((v) => ({
         x: parseDate(v.thoiGian),
-        y: Number(v.nhietDo) || 0,
-      }))
-
-      chartData.value.datasets[1].data = list.map((v) => ({
-        x: parseDate(v.thoiGian),
         y: Number(v.doAm) || 0,
+        maKho: v.maKho,
       }))
 
       const temps = chartData.value.datasets[0].data.map((d) => d.y)
-      const hums = chartData.value.datasets[1].data.map((d) => d.y)
 
       chartOptions.value.scales.yTemp.suggestedMin = Math.min(...temps) - 1
       chartOptions.value.scales.yTemp.suggestedMax = Math.max(...temps) + 1
-
-      chartOptions.value.scales.yHumidity.suggestedMin = Math.min(...hums) - 1
-      chartOptions.value.scales.yHumidity.suggestedMax = Math.max(...hums) + 1
 
       const dataX = chartData.value.datasets[0].data.map((d) => d.x.getTime())
       if (dataX.length) {
@@ -223,8 +188,7 @@ watch(
 
       if (!map[key]) map[key] = { temp: [], hum: [] }
 
-      map[key].temp.push(Number(v.nhietDo) || 0)
-      map[key].hum.push(Number(v.doAm) || 0)
+      map[key].temp.push(Number(v.doAm) || 0)
     })
 
     const sortedKeys = Object.keys(map).sort()
@@ -232,19 +196,13 @@ watch(
       x: new Date(key),
       y: avg(map[key].temp),
     }))
-    chartData.value.datasets[1].data = sortedKeys.map((key) => ({
-      x: new Date(key),
-      y: avg(map[key].hum),
-    }))
 
     chartOptions.value.scales.x.time.unit = 'day'
     chartOptions.value.scales.x.time.displayFormats = { day: 'dd/MM' }
     chartOptions.value.scales.x.time.tooltipFormat = 'dd/MM/yyyy'
 
     chartOptions.value.scales.yTemp.suggestedMin = 0
-    chartOptions.value.scales.yTemp.suggestedMax = 50
-    chartOptions.value.scales.yHumidity.suggestedMin = 0
-    chartOptions.value.scales.yHumidity.suggestedMax = 100
+    chartOptions.value.scales.yTemp.suggestedMax = 100
 
     const xs = chartData.value.datasets[0].data.map((d) => d.x.getTime())
     if (xs.length) {

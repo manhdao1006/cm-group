@@ -167,8 +167,8 @@ export default {
     },
     chart: {
       title: {
-        bar: 'Chart of number of students picked up and dropped off by bus',
-        line: 'Chart of temperature and humidity over time',
+        lineNhietDo: 'Temperature over time graph',
+        lineDoAm: 'Humidity over time graph',
       },
       label: {
         nhietDo: 'Temperature (°C)',

@@ -8,16 +8,6 @@
           <SidebarMenu :user="user" style="height: 100%" @updateCollapsed="collapsed = $event" />
         </div>
         <div class="flex-grow-1 ms-3 mt-3 me-3" style="width: 100%; height: 100%">
-          <!-- <div class="row col-12 border-bottom border-dark-subtle border-1 pb-3">
-            <BarChart :vehicleList="khoList" />
-          </div> -->
-
-          <div class="row mt-3 mb-3">
-            <div class="col-12 border-end border-dark-subtle border-1">
-              <KhoLineChart :khoList="khoList" />
-            </div>
-          </div>
-
           <div
             class="border border-dark-subtle border-2 rounded-3 p-3 bg-white shadow-sm"
             style="font-size: 13px"
@@ -133,6 +123,14 @@
               </nav>
             </div>
           </div>
+          <div class="row mt-3 mb-3">
+            <div class="col-6 border-end border-dark-subtle border-1">
+              <NhietDoLineChart :khoList="khoList" />
+            </div>
+            <div class="col-6 border-end border-dark-subtle border-1">
+              <DoAmLineChart :khoList="khoList" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -145,13 +143,14 @@
 <script>
 import { useToast } from 'vue-toastification'
 import * as XLSX from 'xlsx'
-import KhoLineChart from './charts/kho/KhoLineChart.vue'
+import DoAmLineChart from './charts/kho/DoAmLineChart.vue'
+import NhietDoLineChart from './charts/kho/NhietDoLineChart.vue'
 import BaseHeader from './common/BaseHeader.vue'
 import SidebarMenu from './common/SidebarMenu.vue'
 
 export default {
   name: 'DuLieuKhoLanh',
-  components: { BaseHeader, SidebarMenu, KhoLineChart },
+  components: { BaseHeader, SidebarMenu, NhietDoLineChart, DoAmLineChart },
 
   data() {
     return {

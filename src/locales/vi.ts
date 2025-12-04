@@ -167,8 +167,8 @@ export default {
     },
     chart: {
       title: {
-        bar: 'Biểu đồ số lượng đón và trả sinh viên theo xe',
-        line: 'Biểu đồ nhiệt độ và độ ẩm theo thời gian',
+        lineNhietDo: 'Biểu đồ nhiệt độ theo thời gian',
+        lineDoAm: 'Biểu đồ độ ẩm theo thời gian',
       },
       label: {
         nhietDo: 'Nhiệt độ (°C)',

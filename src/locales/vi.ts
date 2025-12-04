@@ -172,13 +172,17 @@ export default {
       title: {
         lineNhietDo: 'Biểu đồ nhiệt độ theo thời gian',
         lineDoAm: 'Biểu đồ độ ẩm theo thời gian',
+        linePeople: 'Biểu đồ trạng thái có người theo thời gian',
       },
       label: {
+        trangThai: 'Trạng thái',
         nhietDo: 'Nhiệt độ (°C)',
         doAm: 'Độ ẩm (%)',
         time: 'Thời gian',
       },
       unit: {
+        coNguoi: 'Có người',
+        khongNguoi: 'Không',
         nhietDo: 'Nhiệt độ (°C)',
         doAm: 'Độ ẩm (%)',
       },

@@ -107,6 +107,11 @@ const chartOptions = ref({
         text: t('khoLanh.chart.label.time'),
         font: { weight: 'bold', size: 16 },
       },
+      ticks: {
+        font: {
+          style: 'italic',
+        },
+      },
     },
     yTemp: {
       type: 'linear',

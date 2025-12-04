@@ -77,7 +77,10 @@
           </div>
         </div>
 
-        <div class="table-responsive">
+        <div
+          class="table-responsive border border-dark-subtle border-2 rounded-3 p-3 bg-white shadow-sm"
+          style="font-size: 13px"
+        >
           <div class="fw-bolder text-black text-uppercase mb-2 mt-2 fs-5">
             {{ $t('khoLanh.tongHopData') }}
           </div>
@@ -97,45 +100,47 @@
               </tr>
             </tbody>
           </table>
-        </div>
-        <div class="d-flex justify-content-between align-items-center mt-3">
-          <div>
-            {{ $t('khoLanh.pagination.display') }}
-            <select v-model.number="itemsPerPage" class="form-select d-inline w-auto mx-2">
-              <option :value="5">5</option>
-              <option :value="10">10</option>
-              <option :value="20">20</option>
-            </select>
-            {{ $t('khoLanh.pagination.rowPerPage') }}
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+              {{ $t('khoLanh.pagination.display') }}
+              <select v-model.number="itemsPerPage" class="form-select d-inline w-auto mx-2">
+                <option :value="5">5</option>
+                <option :value="10">10</option>
+                <option :value="20">20</option>
+              </select>
+              {{ $t('khoLanh.pagination.rowPerPage') }}
+            </div>
+
+            <nav>
+              <ul class="pagination mb-0">
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                  <button class="page-link" @click="prevPage">
+                    {{ $t('khoLanh.button.firstPage') }}
+                  </button>
+                </li>
+                <li
+                  v-for="page in totalPages"
+                  :key="page"
+                  class="page-item"
+                  :class="{ active: currentPage === page }"
+                >
+                  <button class="page-link" @click="goToPage(page)">
+                    {{ page }}
+                  </button>
+                </li>
+                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                  <button class="page-link" @click="nextPage">
+                    {{ $t('khoLanh.button.lastPage') }}
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
-
-          <nav>
-            <ul class="pagination mb-0">
-              <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <button class="page-link" @click="prevPage">
-                  {{ $t('khoLanh.button.firstPage') }}
-                </button>
-              </li>
-              <li
-                v-for="page in totalPages"
-                :key="page"
-                class="page-item"
-                :class="{ active: currentPage === page }"
-              >
-                <button class="page-link" @click="goToPage(page)">
-                  {{ page }}
-                </button>
-              </li>
-              <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                <button class="page-link" @click="nextPage">
-                  {{ $t('khoLanh.button.lastPage') }}
-                </button>
-              </li>
-            </ul>
-          </nav>
         </div>
 
-        <div class="col-12 text-center mt-3">
+        <PeopleLineChart :khoList="list" />
+
+        <div class="col-12 text-center mt-2 mb-3">
           <button class="btn btn-secondary" @click="$router.back()">
             {{ $t('khoLanh.button.back') }}
           </button>
@@ -148,12 +153,13 @@
 </template>
 
 <script>
+import PeopleLineChart from './charts/kho/PeopleLineChart.vue'
 import BaseHeader from './common/BaseHeader.vue'
 import SidebarMenu from './common/SidebarMenu.vue'
 
 export default {
   props: ['maKho'],
-  components: { BaseHeader, SidebarMenu },
+  components: { BaseHeader, SidebarMenu, PeopleLineChart },
 
   data() {
     return {

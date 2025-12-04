@@ -112,6 +112,11 @@ const chartOptions = ref({
         text: t('data.chart.label.time'),
         font: { weight: 'bold', size: 16 },
       },
+      ticks: {
+        font: {
+          style: 'italic',
+        },
+      },
     },
     y: {
       title: {

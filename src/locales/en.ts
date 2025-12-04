@@ -172,13 +172,17 @@ export default {
       title: {
         lineNhietDo: 'Temperature over time graph',
         lineDoAm: 'Humidity over time graph',
+        linePeople: 'People state graph over time',
       },
       label: {
+        trangThai: 'Status',
         nhietDo: 'Temperature (°C)',
         doAm: 'Humidity (%)',
         time: 'Time',
       },
       unit: {
+        coNguoi: 'Has People',
+        khongNguoi: 'No',
         nhietDo: 'Temperature (°C)',
         doAm: 'Humidity (%)',
       },

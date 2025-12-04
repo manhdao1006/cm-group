@@ -134,6 +134,8 @@ export default {
     unknown: 'Không xác định',
     loading: 'Đang tải...',
     listKho: 'Danh sách kho',
+    detail: 'Chi tiết kho',
+    tongHopData: 'Tổng hợp dữ liệu',
     table: {
       no: 'STT',
       maKho: 'Mã kho',
@@ -160,6 +162,7 @@ export default {
       firstPage: 'Trước',
       lastPage: 'Sau',
       viewByDay: 'Xem theo ngày',
+      back: 'Quay lại',
     },
     pagination: {
       display: 'Hiển thị',
@@ -183,6 +186,12 @@ export default {
         nhietDo: 'Nhiệt độ (°C)',
         doAm: 'Độ ẩm (%)',
       },
+    },
+    card: {
+      nhietDo: 'Nhiệt độ',
+      nhietDoThietBi: 'Nhiệt độ thiết bị',
+      doAm: 'Độ ẩm',
+      capNhatLuc: 'Cập nhật lúc',
     },
   },
 }

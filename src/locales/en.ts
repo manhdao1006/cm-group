@@ -134,6 +134,8 @@ export default {
     unknown: 'Unknown',
     loading: 'Loading...',
     listKho: 'List of warehouses',
+    detail: 'Warehouse details',
+    tongHopData: 'Data summary',
     table: {
       no: 'STT',
       maKho: 'Warehouse code',
@@ -160,6 +162,7 @@ export default {
       firstPage: 'Previous',
       lastPage: 'Next',
       viewByDay: 'View by day',
+      back: 'Back',
     },
     pagination: {
       display: 'Display',
@@ -183,6 +186,12 @@ export default {
         nhietDo: 'Temperature (°C)',
         doAm: 'Humidity (%)',
       },
+    },
+    card: {
+      nhietDo: 'Temperature',
+      nhietDoThietBi: 'Device temperature',
+      doAm: 'Humidity',
+      capNhatLuc: 'Updated at',
     },
   },
 }

@@ -57,7 +57,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(v, index) in paginatedList" :key="v.maKho">
+                  <tr
+                    v-for="(v, index) in paginatedList"
+                    :key="v.maKho"
+                    @click="goDetail(v.maKho)"
+                    class="row-hover"
+                    style="cursor: pointer"
+                  >
                     <td>{{ index + 1 }}</td>
                     <td>{{ v.maKho }}</td>
                     <td>{{ v.loaiKho }}</td>
@@ -200,6 +206,9 @@ export default {
   },
 
   methods: {
+    goDetail(maKho) {
+      this.$router.push({ name: 'ChiTietKho', params: { maKho } })
+    },
     parseThoiGian(str) {
       const [date, time] = str.split(' ')
       const [day, month, year] = date.split('/')
@@ -320,6 +329,13 @@ export default {
 </script>
 
 <style scoped>
+.row-hover:hover {
+  background-color: #eef6ff !important;
+  transform: scale(1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.15s ease;
+}
+
 .loading-overlay {
   position: fixed;
   top: 0;

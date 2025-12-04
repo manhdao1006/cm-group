@@ -173,15 +173,13 @@ export default {
   computed: {
     activeNavItems() {
       const current = this.$route.path
-      return this.navItems.filter((item) => {
-        if (
-          (current === '/' || current === '/trang-chu') &&
-          (item.to === '/' || item.to === '/trang-chu')
-        ) {
-          return true
-        }
-        return current === item.to
-      })
+      if (current.startsWith('/kho-lanh')) {
+        return this.navItems.filter((item) => item.to === '/kho-lanh')
+      }
+      if (current === '/' || current === '/trang-chu') {
+        return this.navItems.filter((item) => item.to === '/' || item.to === '/trang-chu')
+      }
+      return this.navItems.filter((item) => current === item.to)
     },
   },
   watch: {
@@ -201,6 +199,11 @@ export default {
         { to: '/du-lieu', label: this.$t('header.navigation.data'), icon: 'fas fa-database' },
         { to: '/kho-lanh', label: this.$t('header.navigation.khoLanh'), icon: 'fas fa-warehouse' },
         {
+          to: '/kho-lanh/:maKho',
+          label: this.$t('header.navigation.khoLanh'),
+          icon: 'fas fa-warehouse',
+        },
+        {
           to: '/quan-ly-nguoi-dung',
           label: this.$t('header.navigation.account'),
           icon: 'fas fa-users-cog',
@@ -208,7 +211,7 @@ export default {
       ]
     },
     checkLogin(path) {
-      const protectedRoutes = ['/map-bus', '/quan-ly-nguoi-dung']
+      const protectedRoutes = ['/map-bus', '/quan-ly-nguoi-dung', '/kho-lanh', '/du-lieu']
       if (!this.user && protectedRoutes.includes(path)) {
         this.toast.error(this.$t('notification.checkLogin'))
         return

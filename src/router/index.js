@@ -1,3 +1,4 @@
+import ChiTietKho from '@/components/ChiTietKho.vue'
 import Login from '@/components/common/Login.vue'
 import DuLieuKhoLanh from '@/components/DuLieuKhoLanh.vue'
 import QuanLyNguoiDung from '@/components/QuanLyNguoiDung.vue'
@@ -7,6 +8,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MapBus from '../components/MapBus.vue'
 
 const routes = [
+  {
+    path: '/kho-lanh/:maKho',
+    name: 'ChiTietKho',
+    component: ChiTietKho,
+    props: true,
+  },
   {
     path: '/kho-lanh',
     name: 'DuLieuKhoLanh',

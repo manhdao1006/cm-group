@@ -293,7 +293,7 @@ export default {
     logout() {
       this.user = null
       localStorage.removeItem('googleUser')
-      window.location.reload()
+      this.$router.push('/')
     },
   },
 }

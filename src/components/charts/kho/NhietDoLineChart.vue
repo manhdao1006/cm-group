@@ -165,7 +165,7 @@ watch(
 
       chartData.value.datasets[0].data = list.map((v) => ({
         x: parseDate(v.thoiGian),
-        y: Number(v.nhietDo) || 0,
+        y: Number(String(v.nhietDo).replace(',', '.')),
         maKho: v.maKho,
       }))
 
@@ -193,7 +193,7 @@ watch(
 
       if (!map[key]) map[key] = { temp: [], hum: [] }
 
-      map[key].temp.push(Number(v.nhietDo) || 0)
+      map[key].temp.push(Number(String(v.nhietDo).replace(',', '.')))
     })
 
     const sortedKeys = Object.keys(map).sort()
@@ -222,9 +222,15 @@ watch(
 )
 
 function parseDate(str) {
-  const [day, month, yearTime] = str.split('/')
-  const [year, time] = yearTime.split(' ')
-  return new Date(`${year}-${month}-${day}T${time}`)
+  if (!str) return new Date('')
+
+  const [datePart, timePart] = str.split(' ')
+  if (!datePart || !timePart) return new Date('')
+
+  const [day, month, year] = datePart.split('/').map(Number)
+  const [h, m, s] = timePart.split(':').map(Number)
+
+  return new Date(year, month - 1, day, h, m, s)
 }
 
 function avg(arr) {

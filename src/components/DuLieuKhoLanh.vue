@@ -25,8 +25,8 @@
               <div class="col-md-3">
                 <select v-model="filterLoaiKho" class="form-select">
                   <option value="">{{ $t('khoLanh.button.filter.all') }}</option>
-                  <option value="Khô">{{ $t('khoLanh.button.filter.kho') }}</option>
-                  <option value="Lạnh">{{ $t('khoLanh.button.filter.lanh') }}</option>
+                  <option value="Kho">{{ $t('khoLanh.button.filter.kho') }}</option>
+                  <option value="Lanh">{{ $t('khoLanh.button.filter.lanh') }}</option>
                 </select>
               </div>
               <div class="col-md-2">
@@ -66,7 +66,13 @@
                   >
                     <td>{{ index + 1 }}</td>
                     <td>{{ v.maKho }}</td>
-                    <td>{{ v.loaiKho }}</td>
+                    <td>
+                      {{
+                        v.loaiKho === 'Lanh'
+                          ? $t('khoLanh.button.filter.lanh')
+                          : $t('khoLanh.button.filter.kho')
+                      }}
+                    </td>
                     <td>{{ v.hangHoa }}</td>
                     <td>{{ v.toaNha }}</td>
                     <td>{{ v.nhietDo }}</td>
@@ -264,9 +270,12 @@ export default {
           const maKho = row[1]
           if (!maKho) return
 
-          const [datePart, timePart] = row[0].split(' ')
+          const raw = row[0]
+          const [datePart, timePart] = raw.split(' ')
           const [day, month, year] = datePart.split('/')
-          const thoiGian = new Date(`${year}-${month}-${day}T${timePart}`)
+          let [h, mi, s] = timePart.split(':')
+          h = h.padStart(2, '0')
+          const thoiGian = new Date(`${year}-${month}-${day}T${h}:${mi}:${s}`)
 
           if (isNaN(thoiGian)) return
 
@@ -308,8 +317,8 @@ export default {
             loaiKho,
             hangHoa,
             toaNha,
-            nhietDo: parseFloat(nhietDo) || 0,
-            doAm: parseFloat(doAm) || 0,
+            nhietDo,
+            doAm,
             coNguoi,
           })
         }

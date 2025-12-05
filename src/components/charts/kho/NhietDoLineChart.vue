@@ -159,8 +159,8 @@ watch(
         return dt >= dayStart && dt < dayEnd
       })
 
-      chartOptions.value.scales.x.time.unit = 'hour'
-      chartOptions.value.scales.x.time.displayFormats = { hour: 'HH:mm' }
+      chartOptions.value.scales.x.time.unit = 'minute'
+      chartOptions.value.scales.x.time.displayFormats = { minute: 'HH:mm' }
       chartOptions.value.scales.x.time.tooltipFormat = 'dd/MM/yyyy HH:mm'
 
       chartData.value.datasets[0].data = list.map((v) => ({

@@ -147,7 +147,9 @@
           </div>
         </div>
 
-        <PeopleLineChart :khoList="list" />
+        <div class="row col-12 border-bottom border-dark-subtle border-1 pb-3">
+          <PeopleLineChart :khoList="list" />
+        </div>
 
         <div class="col-12 text-center mt-2 mb-3">
           <button class="btn btn-secondary" @click="$router.back()">

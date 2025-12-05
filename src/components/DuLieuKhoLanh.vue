@@ -117,7 +117,7 @@
                     </button>
                   </li>
                   <li
-                    v-for="page in totalPages"
+                    v-for="page in visiblePages"
                     :key="page"
                     class="page-item"
                     :class="{ active: currentPage === page }"
@@ -188,6 +188,29 @@ export default {
           return matchText && matchLoaiKho
         })
         .sort((a, b) => this.parseThoiGian(b.thoiGian) - this.parseThoiGian(a.thoiGian))
+    },
+
+    visiblePages() {
+      const total = this.totalPages
+      const current = this.currentPage
+      const max = 5
+
+      if (total <= max) return Array.from({ length: total }, (_, i) => i + 1)
+
+      let start = current - Math.floor(max / 2)
+      let end = current + Math.floor(max / 2)
+
+      if (start < 1) {
+        start = 1
+        end = max
+      }
+
+      if (end > total) {
+        end = total
+        start = total - max + 1
+      }
+
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i)
     },
 
     totalPages() {

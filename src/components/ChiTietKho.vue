@@ -9,6 +9,15 @@
       <div class="flex-grow-1 ms-3 mt-3 me-3" style="width: 100%; height: 100%">
         <h3>{{ $t('khoLanh.detail') }} {{ maKho }}</h3>
 
+        <div class="row mt-3 mb-3">
+          <div class="col-6 border-end border-dark-subtle border-1">
+            <NhietDoLineChart :khoList="list" />
+          </div>
+          <div class="col-6 border-end border-dark-subtle border-1">
+            <DoAmLineChart :khoList="list" />
+          </div>
+        </div>
+
         <div v-if="latest" class="row mb-3">
           <div class="col-3">
             <div class="card shadow-sm border-primary stat-card h-100">
@@ -153,13 +162,15 @@
 </template>
 
 <script>
+import DoAmLineChart from './charts/kho/DoAmLineChart.vue'
+import NhietDoLineChart from './charts/kho/NhietDoLineChart.vue'
 import PeopleLineChart from './charts/kho/PeopleLineChart.vue'
 import BaseHeader from './common/BaseHeader.vue'
 import SidebarMenu from './common/SidebarMenu.vue'
 
 export default {
   props: ['maKho'],
-  components: { BaseHeader, SidebarMenu, PeopleLineChart },
+  components: { BaseHeader, SidebarMenu, PeopleLineChart, NhietDoLineChart, DoAmLineChart },
 
   data() {
     return {

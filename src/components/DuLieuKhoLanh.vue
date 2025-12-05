@@ -135,14 +135,6 @@
               </nav>
             </div>
           </div>
-          <div class="row mt-3 mb-3">
-            <div class="col-6 border-end border-dark-subtle border-1">
-              <NhietDoLineChart :khoList="khoList" />
-            </div>
-            <div class="col-6 border-end border-dark-subtle border-1">
-              <DoAmLineChart :khoList="khoList" />
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -155,14 +147,12 @@
 <script>
 import { useToast } from 'vue-toastification'
 import * as XLSX from 'xlsx'
-import DoAmLineChart from './charts/kho/DoAmLineChart.vue'
-import NhietDoLineChart from './charts/kho/NhietDoLineChart.vue'
 import BaseHeader from './common/BaseHeader.vue'
 import SidebarMenu from './common/SidebarMenu.vue'
 
 export default {
   name: 'DuLieuKhoLanh',
-  components: { BaseHeader, SidebarMenu, NhietDoLineChart, DoAmLineChart },
+  components: { BaseHeader, SidebarMenu },
 
   data() {
     return {
